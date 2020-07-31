@@ -1,26 +1,39 @@
+
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { Hotels } from './components/Hotels/index';
+import { FirstHotels } from './components/FirstHotels/index';
 
-export default App;
+import { Hotel } from './components/Hotel/index';
+
+import './App.less';
+
+// import { Header } from './components/Header/index';
+// import { Footer } from './components/Footer/Footer';
+
+export const App = ({ openedModalWindow }) => (
+    <>
+        {/*<Header />*/}
+        <div className="page">
+            <main>
+                <FirstHotels />
+                <Hotels />
+                {/*<Route*/}
+                {/*    exact*/}
+                {/*    path="/"*/}
+                {/*    component={RestaurantsListPage}*/}
+                {/*/>*/}
+
+                {/*<Route*/}
+                {/*    path="/restaurants/:id"*/}
+                {/*    component={RestaurantPage}*/}
+                {/*/>*/}
+            </main>
+        </div>
+        {/*<Footer />*/}
+    </>
+);
+
+App.propTypes = {};
