@@ -1,0 +1,44 @@
+svg:not(:root) {
+  width: 1em;
+  height: 1em;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  fill: currentColor;
+  pointer-events: none;
+  display: inline-flex;
+}
+
+/* helpers
+---------------------------------------------------------------*/
+.max-767 {
+
+  @media (min-width: 768px) {
+    display: none !important;
+  }
+}
+
+.min-768 {
+
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+.max-1151 {
+
+  @media (min-width: 1152px) {
+    display: none !important;
+  }
+}
+
+.min-1152 {
+
+  @media (max-width: 1151px) {
+    display: none !important;
+  }
+}

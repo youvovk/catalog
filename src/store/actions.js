@@ -4,12 +4,22 @@ export const ACTION_TYPES = {
     SAVE_TOTAL: 'SAVE_TOTAL',
     SAVE_FIRST_HOTEL: 'SAVE_FIRST_HOTEL',
     SET_LOAD_ERROR: 'SET_LOAD_ERROR',
+    SET_PAGE: 'SET_PAGE',
+    SET_FILTERED_HOTELS_LENGTH: 'SET_FILTERED_HOTELS_LENGTH',
+    SET_FILTER: 'SET_FILTER',
     SET_OFFSET: 'SET_OFFSET',
+    SET_IS_ACTIVE_SORT: 'SET_IS_ACTIVE_SORT',
+    SET_SORT: 'SET_SORT',
     SET_LIMIT: 'SET_LIMIT',
     START_LOADING: 'START_LOADING',
     STOP_LOADING: 'STOP_LOADING',
     PREPARE_HOTELS: 'PREPARE_HOTELS',
 };
+
+let headers = new Headers();
+headers.set('Authorization', 'Basic ' + btoa("planet" + ":" + "planet"));
+headers.set('Cache-Control', 'no-cache');
+headers.set('Postman-Token', '447d8b35-042e-1027-a39e-588c28284c62');
 
 const init = {
     "async": true,
@@ -21,16 +31,11 @@ const init = {
     }
 };
 
-const url = (offset, limit) => `http://192.168.0.131/__ajax/catalog?city_idcity_id=1210&offset=${offset}&limit=${limit}`;
+export const url = (offset, limit) => `/__ajax/catalog?city_idcity_id=1210&offset=${offset}&limit=${limit}`;
 
 const saveHotels = data => ({
     type: ACTION_TYPES.SAVE_HOTELS,
     payload: data,
-});
-
-export const prepareHotels = (offset, limit) => ({
-    type: ACTION_TYPES.PREPARE_HOTELS,
-    payload: url(offset, limit),
 });
 
 const saveFirstHotel = data => ({
@@ -48,8 +53,34 @@ const setError = error => ({
     payload: error,
 });
 
+export const setPage = data => ({
+    type: ACTION_TYPES.SET_PAGE,
+    payload: data,
+});
+
+export const setFilteredHotelsLength = data => ({
+    type: ACTION_TYPES.SET_FILTERED_HOTELS_LENGTH,
+    payload: data,
+});
+
+export const setFilter = (data, name) => ({
+    type: ACTION_TYPES.SET_FILTER,
+    payload: data,
+    name,
+});
+
 export const setOffset = data => ({
     type: ACTION_TYPES.SET_OFFSET,
+    payload: data,
+});
+
+export const setIsActiveSort = data => ({
+    type: ACTION_TYPES.SET_IS_ACTIVE_SORT,
+    payload: data,
+});
+
+export const setActiveSort = data => ({
+    type: ACTION_TYPES.SET_SORT,
     payload: data,
 });
 
@@ -66,28 +97,21 @@ const stopLoading = (limit) => ({
     type: ACTION_TYPES.STOP_LOADING,
 });
 
-export const loadHotels = (offset, limit, loadedAll, total) => (dispatch) => {
-
-    if (!loadedAll) {
-        let offsetNext = offset + limit;
-        dispatch(setOffset(offsetNext));
-
-        dispatch(startLoading());
-
-        fetch(url(offset, 50), init)
+export const loadHotels = preparedHotels => (dispatch) => {
+    preparedHotels.forEach(url => {
+        fetch(url, init)
             .then(res => res.json())
             .then(({ response }) => {
-                dispatch(startLoading());
-                //console.log(response, 'hotels');
+                // dispatch(startLoading());
                 const {
                     data
                 } = response;
 
-                dispatch(saveHotels(data));
+                dispatch(saveHotels(Object.entries(data)));
             })
             .catch(error => dispatch(setError(error.massage)))
-            .finally(() => dispatch(stopLoading()));
-    }
+        // .finally(() => dispatch(stopLoading()))
+     });
 };
 
 export const loadFirstHotel = (offset, limit) => (dispatch) => {
@@ -106,7 +130,7 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
             dispatch(saveTotal(total));
             dispatch(setOffset(25));
             dispatch(setLimit(50));
-            dispatch(saveFirstHotel(data));
+            dispatch(saveFirstHotel(Object.entries(data)));
         })
         .catch(error => dispatch(setError(error.massage)))
         .finally(() => dispatch(stopLoading()));

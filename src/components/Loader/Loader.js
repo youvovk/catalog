@@ -1,6 +1,6 @@
 
 import React from 'react';
-import './Loader.less';
+import './Loader.scss';
 
 export const Loader = () => (
     <div className="loader-container">

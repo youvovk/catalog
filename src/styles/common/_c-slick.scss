@@ -1,0 +1,221 @@
+.c-slick {
+  //display: none;
+  margin-left: -$gap;
+  margin-right: -$gap;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+
+  @media (max-width: 1151px) {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  @media (min-width: 1152px) {
+    margin-left: -$gap / 2;
+    margin-right: -$gap / 2;
+  }
+  
+  &__item {
+    flex: none;
+    position: relative;
+    padding-left: $gap;
+  
+    @media (min-width: 1152px) {
+      padding: $gap;
+      vertical-align: top;
+    }
+  }
+  
+  &__wrap {
+    height: 100%;
+    position: relative;
+  }
+  
+  &__arrow {
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    top: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    position: absolute;
+  
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      display: block;
+      transform: rotate(45deg);
+      transition: .3s;
+    }
+  
+    &--prev {
+      left: -$gap-large;
+  
+      &-hotels {
+        left: 1px;
+      }
+  
+      &:before {
+        margin-left: 5px;
+        border-left: 2px solid;
+        border-bottom: 2px solid;
+      }
+    }
+  
+    &--next {
+      right: -$gap-large;
+  
+      &-hotels {
+        right: 1px;
+      }
+  
+      &:before {
+        margin-right: 5px;
+        border-top: 2px solid;
+        border-right: 2px solid;
+      }
+    }
+  
+    &:hover:before {
+      border-color: $gray-dark;
+    }
+  }
+  
+  &__card {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+  
+    * {
+      height: 100%;
+    }
+  
+    .slick-slide {
+      position: relative;
+    }
+  
+    img {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+    }
+  
+    .c-slick__arrow {
+          top: 0;
+  
+          @media (max-width: 767px) {
+            align-items: flex-end;
+            padding-bottom: 10px;
+          }
+  
+          &:before {
+            border-color: $white;
+  
+            @media (max-width: 767px) {
+              width: 8px;
+              height: 8px;
+            }
+          }
+  
+          &--prev {
+  
+            @media (max-width: 767px) {
+              left: 4px;
+            }
+  
+            @media (min-width: 768px) {
+              left: 16px;
+            }
+          }
+  
+          &--next {
+  
+            @media (max-width: 767px) {
+              right: 4px;
+            }
+  
+            @media (min-width: 768px) {
+              right: 16px
+            }
+          }
+        }
+  }
+  
+  // modifier
+  //-------------------------------------------------------
+    .swiper-pagination {
+      z-index: 9;
+    }
+
+    &--100vw {
+
+      @media (min-width: 1152px) {
+        left: 50%;
+        width: 100vw;
+        margin-left: -50vw;
+        position: relative;
+      }
+    }
+  
+    &--m-0,
+    &--m-0-min--1152 {
+
+      .c-slick__arrow {
+
+      &--prev {
+
+        @media (min-width: 1366px) {
+          left: -$gap * 2;
+        }
+      }
+
+      &--next {
+
+        @media (min-width: 1366px) {
+          right: -$gap * 2;
+        }
+      }
+    }
+    }
+
+    &--m-0 {
+      margin: 0;
+    }
+
+    &--m-0-min--1152 {
+
+      @media (min-width: 1152px) {
+        margin: 0;
+      }
+    }
+
+    &--m-30-max--1152 {
+      @media (max-width: 1152px) {
+        margin-top: 30px;
+      }
+    }
+
+    &--arrow-m-0 {
+      margin: 0;
+
+      .c-slick__arrow {
+
+      &--prev {
+        left: 0;
+      }
+
+      &--next {
+        right: 0;
+      }
+    }
+  }
+}

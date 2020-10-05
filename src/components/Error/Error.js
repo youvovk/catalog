@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Error.less';
+import './Error.scss';
 
 export const Error = (props) => {
     const { message, path = 'Home' } = props;

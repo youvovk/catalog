@@ -1,0 +1,256 @@
+@import "../minor/variables";
+
+/* .l-row
+---------------------------------------------------------------*/
+.l-row {
+  margin-top: 10px;
+
+  @media (min-width: $viewport-1151) {
+    margin-top: 40px;
+  }
+
+  &:first-child:not([class*="l-row--mt"]) {
+    margin-top: 0;
+  }
+
+  // modifier
+  //-------------------------------------------------------
+  &--flex {
+    display: flex;
+  }
+
+  &--align-center {
+    align-items: center;
+  }
+
+  &--between {
+    justify-content: space-between;
+  }
+
+  &--grow {
+    flex-grow: 1;
+  }
+
+  &--center {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &--align-end {
+    align-items: flex-end;
+  }
+
+  &--max-1152-m-20 {
+    @media (max-width: $viewport-1151) {
+      margin: 20px 0;
+    }
+  }
+
+  &--mb-40 {
+    margin-bottom: 40px;
+  }
+
+  &--mb-80 {
+    margin-bottom: 80px;
+  }
+
+  &--mb-160 {
+    margin-bottom: 160px;
+  }
+
+  &--max-1152-mb-20 {
+    @media (max-width: $viewport-1151) {
+      margin-bottom: 20px;
+    }
+  }
+
+  &--max-1152-mb-30 {
+    @media (max-width: $viewport-1151) {
+      margin-bottom: 30px;
+    }
+  }
+
+  &--min-1152-mb-100 {
+    @media (min-width: $viewport-1151) {
+      margin-bottom: 80px;
+    }
+  }
+
+  &--mt-0 {
+    margin-top: 0;
+  }
+
+  &--mt-10 {
+    margin-top: 10px;
+  }
+
+  &--mt-10-desktop {
+    margin-top: 10px;
+  }
+
+  &--mt--10 {
+    margin-top: -10px;
+  }
+
+  &--mt-20 {
+    margin-top: 20px;
+  }
+
+  &--mt-40 {
+    margin-top: 20px;
+
+    @media (min-width: $viewport-1151) {
+      margin-top: 40px;
+    }
+  }
+
+  &--mt-50 {
+    margin-top: 50px;
+  }
+
+  &--mt-60 {
+    margin-top: 60px;
+  }
+
+  &--mt-80 {
+    margin-top: 40px;
+
+    @media (min-width: $viewport-1151) {
+      margin-top: 80px;
+    }
+  }
+
+  &--max-767-mt-40 {
+    @media (max-width: $viewport-768) {
+      margin-top: 40px;
+    }
+  }
+
+  &--max-1151-mt-0 {
+    @media (max-width: $viewport-1151) {
+      margin-top: 0;
+    }
+  }
+
+  &--max-1151-mt-10 {
+    @media (max-width: $viewport-1151) {
+      margin-top: 10px;
+    }
+  }
+
+  &--max-1152-mt-30 {
+    @media (max-width: $viewport-1151) {
+      margin-top: 30px;
+    }
+  }
+
+  &--max-1152-mt-40 {
+    @media (max-width: $viewport-1151) {
+      margin-top: 40px;
+    }
+  }
+
+  &--min-1152-mt-0 {
+    @media (min-width: $viewport-1151) {
+      margin-top: 0;
+    }
+  }
+
+  &--min-1152-pt-20 {
+    @media (min-width: $viewport-1151) {
+      padding-top: 20px !important;
+    }
+  }
+
+  &--w-1000 {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &--bg-gray {
+    position: relative;
+
+    > * {
+      z-index: 1;
+      position: relative;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      background-color: #f3f5f8;
+
+      @media (max-width: $viewport-768) {
+        top: -$gap * 3;
+        left: -$gap;
+        right: -$gap;
+        bottom: -$gap * 3;
+      }
+
+      @media (min-width: $viewport-768) {
+        top: -$gap * 4;
+        left: 50%;
+        bottom: -$gap * 4;
+        width: 100vw;
+        transform: translateX(-50%);
+      }
+    }
+  }
+
+  &--bg-gray-line {
+    position: relative;
+
+    &:before {
+
+      @media (min-width: $viewport-1151) {
+        top: 0;
+        left: 50%;
+        bottom: 0;
+        width: 130vw;
+        height: 55%;
+        margin: auto;
+        content: '';
+        position: absolute;
+        background-color: #f3f5f8;
+        transform: translateX(-50%) rotate(15deg);
+      }
+    }
+  }
+
+  &--bg-gray-max-1151 {
+
+    @media (max-width: $viewport-1151) {
+      position: relative;
+
+      > * {
+        z-index: 1;
+        position: relative;
+      }
+
+      &:before {
+        top: -$gap;
+        left: -$gap;
+        right: -$gap;
+        bottom: -$gap;
+        content: '';
+        margin: auto;
+        position: absolute;
+        background-color: #f3f5f8;
+      }
+    }
+  }
+
+  &--bg-gray-light {
+    padding: 10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    background-color: #f3f5f8;
+  }
+
+  &--slice {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+}

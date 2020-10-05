@@ -1,12 +1,21 @@
 import { ACTION_TYPES } from './actions';
 
 const initialStore = {
-    hotels: null,
-    firstHotels: null,
-    preparedHotels: [],
+    allHotels: [],
+    hotels: [],
+    firstHotels: [],
+    filteredHotelsLength: null,
+    page: 1,
+    isActiveFilters: false,
+    filters: {
+        regions: [],
+        stars: [],
+    },
+    isActiveSort: false,
     total: 0,
     offset: 0,
     limit: 25,
+    sorts: [],
     isLoading: false,
     error: null,
 };
@@ -20,10 +29,14 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 error: null,
-                hotels: {
+                allHotels: [
+                    ...state.allHotels,
+                    ...payload,
+                ],
+                hotels: [
                     ...state.hotels,
                     ...payload,
-                },
+                ],
             };
         }
 
@@ -33,19 +46,8 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 error: null,
-                firstHotels: {
-                    ...payload,
-                },
-            };
-        }
-
-        case ACTION_TYPES.PREPARE_HOTELS: {
-            const { payload } = action;
-
-            return {
-                ...state,
-                error: null,
-                preparedHotels: [ ...state.preparedHotels, payload],
+                allHotels: [...payload],
+                firstHotels: [...payload],
             };
         }
 
@@ -58,12 +60,60 @@ export function rootReducer(state = initialStore, action) {
             };
         }
 
+        case ACTION_TYPES.SET_FILTER: {
+            const { payload, name } = action;
+
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    [name]: payload
+                },
+            };
+        }
+
+        case ACTION_TYPES.SET_FILTERED_HOTELS_LENGTH: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                filteredHotelsLength: payload,
+            };
+        }
+
+        case ACTION_TYPES.SET_PAGE: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                page: payload,
+            };
+        }
+
         case ACTION_TYPES.SET_OFFSET: {
             const { payload } = action;
 
             return {
                 ...state,
                 offset: payload,
+            };
+        }
+
+        case ACTION_TYPES.SET_IS_ACTIVE_SORT: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                isActiveSort: payload,
+            };
+        }
+
+        case ACTION_TYPES.SET_SORT: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                sorts: payload,
             };
         }
 

@@ -1,0 +1,59 @@
+.c-grid {
+  display: flex;
+
+  @media (max-width: 1151px) {
+    flex-direction: column;
+  }
+
+  &__left {
+
+    @media (max-width: 1151px) {
+      left: -100%;
+      position: absolute;
+    }
+
+    @media (min-width: 1152px) {
+      width: 280px;
+    }
+
+    > * {
+      margin-top: 20px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &__right {
+
+    @media (min-width: 1152px) {
+      padding-left: 40px;
+      width: calc(100% - 280px);
+    }
+
+    .c-card__left .slick-slide > div::before {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      height: 200px;
+      content: "";
+      background-image: linear-gradient(to top,hsla(0,0%,0%,.5) 0,hsla(0,0%,0%,.494) 8.1%,hsla(0,0%,0%,.476) 15.5%,hsla(0,0%,0%,.448) 22.5%,hsla(0,0%,0%,.412) 29%,hsla(0,0%,0%,.37) 35.3%,hsla(0,0%,0%,.324) 41.2%,hsla(0,0%,0%,.275) 47.1%,hsla(0,0%,0%,.225) 52.9%,hsla(0,0%,0%,.176) 58.8%,hsla(0,0%,0%,.13) 64.7%,hsla(0,0%,0%,.088) 71%,hsla(0,0%,0%,.052) 77.5%,hsla(0,0%,0%,.024) 84.5%,hsla(0,0%,0%,.006) 91.9%,hsla(0,0%,0%,0) 100%);
+    }
+  }
+
+  &__guest {
+    display: flex;
+
+    &--left {
+      width: calc(100% - 275px);
+      padding-right: 16px;
+    }
+
+    &--right {
+      width: 275px;
+    }
+  }
+}

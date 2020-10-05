@@ -8,7 +8,7 @@ import { App } from './AppEnhansed';
 
 import { store } from './store';
 
-import './index.less';
+import './index.scss';
 
 ReactDOM.render(
     <HashRouter>

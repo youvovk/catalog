@@ -1,0 +1,25 @@
+.l-container {
+  flex: none;
+  @include mixin-container;
+
+  // modifier
+  //------------------------------------------------------ -
+  &--bg {
+    background-color: $purple;
+  }
+
+  &--pt-10 {
+    padding-top: 10px;
+  }
+
+  &--pb-10 {
+    padding-bottom: 10px;
+  }
+
+  &--900 {
+    @media (min-width: 1152px) {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  }
+}
