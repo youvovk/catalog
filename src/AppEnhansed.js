@@ -5,7 +5,7 @@ import { setPage, setIsActiveSort } from './store/actions';
 const mapState2Props = (state) => ({
     limit: state.limit,
     filteredHotelsLength: state.filteredHotelsLength,
-    allHotels: state.allHotels,
+    allHotels: Object.entries(state.allHotels),
     filters: state.filters,
 });
 

@@ -5,7 +5,7 @@ import { loadHotels, setLimit, prepareHotels, setFilteredHotelsLength } from "..
 
 const mapState2Props = (state) => {
     return ({
-        allHotels: state.allHotels,
+        allHotels: Object.entries(state.allHotels),
         hotels: state.hotels,
         firstHotels: state.firstHotels,
         filters: state.filters,

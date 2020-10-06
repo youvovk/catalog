@@ -153,7 +153,30 @@
   // modifier
   //-------------------------------------------------------
     .swiper-pagination {
+      height: fit-content;
+      width: fit-content;
+      left: 50%;
       z-index: 9;
+    }
+
+    .swiper-lazy-preloader {
+      background-color: #e5ecf5;
+      background-image: url(../../images/no_photo.svg);
+      background-repeat: no-repeat;
+      background-position: 50%;
+      background-size: 35%;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      color: #fff;
+
+      &:after,
+      &:after {
+        font-size: 15px;
+        font-weight: 600;
+
+      }
     }
 
     &--100vw {

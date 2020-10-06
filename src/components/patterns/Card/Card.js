@@ -1,113 +1,86 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Row } from './Row';
 import { Slider } from '../Slider/Slider';
 
-export const Card = ({ card = [] }) => {
+export const Card = ({ card = {} }) => {
     const options = { isLast: false, isPlural: true, isEmpty: false };
     const {
-        photos = []
+        photos = [],
+        name = '',
+        country_name = '',
+        from_center = '',
+        hotel_type_name = '',
+        stars = 0,
+        minrate = '',
+        address = {},
+        booking_score = {}
     } = card;
 
-    const gallery = url => (
+    const { cnt = 0, val = 0, word = '' } = booking_score ? booking_score : {};
+    const { addressLocality = '', addressRegion = '', streetAddress = '' } = address ? address : {};
+
+    const gallery = ({ url }) => (
         <div className="c-card--shadow">
-            <img src={url}
-                 alt='' />
+            <img data-src={url} className="swiper-lazy" alt="" />
+            <div className="swiper-lazy-preloader" />
         </div>
     );
 
-    const title = () => (
+    const title = ({ title }) => (
         <a className="c-card__title" href="javascript:void(0)">
-            Ibis Budget Auckland Airport
+            {title}
         </a>
     );
 
-    const square = (isStars = false, quantity) => (
+    const square = ({ isStars = false, quantity = 0 }) => (
         <div className="c-card__square">
             {isStars
-                ? <>
-                    <span className="c-card__star--item">
+                ? new Array(quantity).fill(0).map((value, index) => (
+                    <span className="c-card__star--item" key={index}>
                         <svg className="icon icon--star">
                             <use href="images/_sprite.svg#icon--star" />
                         </svg>
                     </span>
-                            <span className="c-card__star--item">
-                        <svg className="icon icon--star">
-                            <use href="images/_sprite.svg#icon--star" />
-                        </svg>
-                    </span>
-                            <span className="c-card__star--item">
-                        <svg className="icon icon--star">
-                            <use href="images/_sprite.svg#icon--star" />
-                        </svg>
-                    </span>
-                            <span className="c-card__star--item">
-                        <svg className="icon icon--star">
-                            <use href="images/_sprite.svg#icon--star" />
-                        </svg>
-                    </span>
-                            <span className="c-card__star--item">
-                        <svg className="icon icon--star">
-                            <use href="images/_sprite.svg#icon--star" />
-                        </svg>
-                    </span>
-                </>
-                : <>
-                    <span className="c-card__square--item" />
-                    <span className="c-card__square--item" />
-                    <span className="c-card__square--item" />
-                    <span className="c-card__square--item" />
-                    <span className="c-card__square--item" />
-                </>
+                ))
+                : new Array(quantity)
+                    .fill(0)
+                    .map((value, index) => (<span key={index} className="c-card__square--item" />))
             }
         </div>
     );
 
-    const rating = () => (
+    const rating = ({ review, number, text }) => (
         <div className="c-card__rating">
             <div className="c-card__rating--row">
                 {(options.isEmpty || options.isLast) && (
-                    <div className="c-card__rating--review">
-                        678
-                        <br/>
-                        отзывов
-                    </div>
+                    <div className="c-card__rating--review">{review}<br/>отзывов</div>
                 )}
-                <div className="c-card__rating--number">
-                    8.7
-                </div>
+                <div className="c-card__rating--number">{number}</div>
             </div>
-            <div className="c-card__rating--text">
-                Великолепно
-            </div>
+            <div className="c-card__rating--text">{text}</div>
         </div>
     );
 
-    const tag = () => <span className="c-card__tag--item c-card__tag--single">Апарт-отель</span>;
+    const type = ({ type }) => <span className="c-card__tag--item c-card__tag--single">{type}</span>;
 
-    const group = () => (
+    const group = ({ address, district, city, country, fromCenter }) => (
         <div className="c-card--group">
             <div className="c-card__row">
                 <a className="c-card__location" href="javascript:void(0)"
-                   title="Урочище Наталка, ул. 2-я линия, 26, Оболонский район, Киев, Украина">
-                    <svg className="icon icon--pin">
-                        <use href="images/_sprite.svg#icon--pin" />
-                    </svg>
-                    <span className="c-card__location--region">Урочище Наталка,</span>
-                    <span className="c-card__location--address">ул. 2-я линия, 26,</span>
-                    <span className="c-card__location--district">Оболонский район,</span>
-                    <span className="c-card__location--city">Киев,</span>
-                    <span className="c-card__location--country">Украина</span>
+                   title={`${address}, ${district}, ${city}, ${country}`}>
+                    <svg className="icon icon--pin"><use href="images/_sprite.svg#icon--pin" /></svg>
+                    <span className="c-card__location--address">{address && `${address}, `}</span>
+                    <span className="c-card__location--district">{district && `${district}, `}</span>
+                    <span className="c-card__location--city">{city && `${city}, `}</span>
+                    <span className="c-card__location--country">{country && country}</span>
                 </a>
             </div>
             <div className="c-card__row">
-                <div className="c-card__distance">
-                    200 м от центра
-                </div>
+                <div className="c-card__distance">{fromCenter}</div>
                 <div className="c-card__dot" />
-                <a className="c-card__map" href="javascript:void(0)">
-                    Показать на карте
-                </a>
+                <a className="c-card__map" href="javascript:void(0)">Показать на карте</a>
             </div>
         </div>
     );
@@ -193,7 +166,7 @@ export const Card = ({ card = [] }) => {
         </div>
     );
 
-    const buy = () => (
+    const buy = ({ rate }) => (
         <div className="c-card__buy">
             {options.isEmpty
                 ? (
@@ -216,9 +189,7 @@ export const Card = ({ card = [] }) => {
                         <div className="c-card__buy--service">
                             На Booking.com
                         </div>
-                        <div className="c-card__buy--price c-card--mt-0">
-                            8 879 <span>UAH</span>
-                        </div>
+                        <div className="c-card__buy--price c-card--mt-0">{String(rate).split(' ')[0]} <span>USD</span></div>
                         <a className="c-card__buy--button" href="javascript:void(0)">
                             Выбрать
                         </a>
@@ -270,15 +241,13 @@ export const Card = ({ card = [] }) => {
         </>
     );
 
-
-
     const cardRight = () => {
         if (options.isPlural || options.isEmpty) {
             return (
                 <div className="c-card__right min-1152">
-                    {rating()}
+                    {rating({ review: cnt, number: val, text: word })}
 
-                    {buy()}
+                    {buy({ rate: minrate })}
                 </div>
             );
         }
@@ -373,7 +342,7 @@ export const Card = ({ card = [] }) => {
         </div>
     );
 
-    const lastCard = () => (
+    const lastCard = ({ rate }) => (
       <>
           <div className="c-card__column">
               <div className="c-card__row min-1152">
@@ -406,7 +375,7 @@ export const Card = ({ card = [] }) => {
               </div>
               <div className="c-card__row c-card--text-right c-card--mt-0">
                   <div className="c-card__price c-card--fs-14-max-1151">
-                      <s className="c-card--fw-300 c-card--fs-12 max-1151">8 879 UAH</s> 8 879 UAH
+                      <s className="c-card--fw-300 c-card--fs-12 max-1151">{rate} <span>USD</span></s>
                   </div>
               </div>
               <div className="c-card__row c-card--text-right c-card--mt-0">
@@ -438,28 +407,39 @@ export const Card = ({ card = [] }) => {
             <div className="c-card__left">
                 <div className="c-slick__wrap">
                     <div className="c-slick c-slick__card">
-                        <Slider items={photos.map(({ url_original = '' }) => ({ html: gallery(url_original), uuid: url_original }))} />
+                        <Slider items={photos.map(({ url_original = '' }) => ({
+                            html: gallery({ url: url_original }),
+                            uuid: url_original
+                        }))} />
                     </div>
                 </div>
             </div>
             <div className="c-card__center">
-                <Row>{title()}</Row>
+                <Row>{title({ title: name })}</Row>
 
                 <Row>
-                    {square()}
+                    {stars ? square({ isStars: true, quantity: stars }) : ''}
 
-                    {tag()}
+                    {type({ type: hotel_type_name })}
                 </Row>
 
                 <Row additionalClass='max-767'>{ratingMax767()}</Row>
 
-                <Row>{group()}</Row>
+                <Row>
+                    {group({
+                        city: addressLocality,
+                        country: country_name,
+                        district: addressRegion,
+                        address: streetAddress,
+                        fromCenter: from_center
+                    })}
+                </Row>
 
                 {options.isLast && (
                     <>
                         <Row>{lastBooking()}</Row>
                         <Row additionalClass='min-1152'>{lastSeen()}</Row>
-                        <Row additionalClass='c-card--flex-between c-card--column-max-1151 c-card--flex-end-max-1151'>{lastCard()}</Row>
+                        <Row additionalClass='c-card--flex-between c-card--column-max-1151 c-card--flex-end-max-1151'>{lastCard({ rate: minrate })}</Row>
                     </>
                 )}
 
@@ -479,4 +459,45 @@ export const Card = ({ card = [] }) => {
             {cardRight()}
         </div>
     );
+};
+
+Card.propTypes = {
+    card: PropTypes.shape({}),
+    photos: PropTypes.arrayOf(
+        PropTypes.shape({
+            main_photo: PropTypes.bool,
+            url_max300: PropTypes.string,
+            url_original: PropTypes.string,
+            url_square60: PropTypes.string
+        })
+    ),
+    name: PropTypes.string.isRequired,
+    country_name: PropTypes.string.isRequired,
+    from_center: PropTypes.string.isRequired,
+    hotel_type_name: PropTypes.string.isRequired,
+    stars: PropTypes.number,
+    minrate: PropTypes.string.isRequired,
+    address: PropTypes.shape({
+        addressLocality: PropTypes.string,
+        addressRegion: PropTypes.string,
+        streetAddress: PropTypes.string
+    }),
+    booking_score: PropTypes.shape({
+        cnt: PropTypes.number,
+        val: PropTypes.number,
+        word: PropTypes.string
+    })
+};
+
+Card.defaultProps = {
+    card: {},
+    photos: [],
+    name: '',
+    country_name: '',
+    from_center: '',
+    hotel_type_name: '',
+    stars: 0,
+    minrate: '',
+    address: {},
+    booking_score: {}
 };

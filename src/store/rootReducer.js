@@ -1,7 +1,7 @@
 import { ACTION_TYPES } from './actions';
 
 const initialStore = {
-    allHotels: [],
+    allHotels: {},
     hotels: [],
     firstHotels: [],
     filteredHotelsLength: null,
@@ -10,6 +10,7 @@ const initialStore = {
     filters: {
         regions: [],
         stars: [],
+        types: [],
     },
     isActiveSort: false,
     total: 0,
@@ -29,13 +30,13 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 error: null,
-                allHotels: [
+                allHotels: {
                     ...state.allHotels,
                     ...payload,
-                ],
+                },
                 hotels: [
                     ...state.hotels,
-                    ...payload,
+                    ...Object.entries(payload),
                 ],
             };
         }
@@ -46,8 +47,10 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 error: null,
-                allHotels: [...payload],
-                firstHotels: [...payload],
+                allHotels: {
+                    ...payload,
+                },
+                firstHotels: [...Object.entries(payload)],
             };
         }
 

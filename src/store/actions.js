@@ -103,13 +103,14 @@ export const loadHotels = preparedHotels => (dispatch) => {
             .then(res => res.json())
             .then(({ response }) => {
                 // dispatch(startLoading());
+
                 const {
                     data
                 } = response;
 
-                dispatch(saveHotels(Object.entries(data)));
+                dispatch(saveHotels(data));
             })
-            .catch(error => dispatch(setError(error.massage)))
+            .catch(error => dispatch(setError(error.message)))
         // .finally(() => dispatch(stopLoading()))
      });
 };
@@ -130,8 +131,8 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
             dispatch(saveTotal(total));
             dispatch(setOffset(25));
             dispatch(setLimit(50));
-            dispatch(saveFirstHotel(Object.entries(data)));
+            dispatch(saveFirstHotel(data));
         })
-        .catch(error => dispatch(setError(error.massage)))
+        .catch(error => dispatch(setError(error.message)))
         .finally(() => dispatch(stopLoading()));
 };

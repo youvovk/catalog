@@ -9,11 +9,12 @@ export const Slider = ({ items }) => (
     <Swiper
         spaceBetween={50}
         slidesPerView={1}
+        lazy={true}
+        preloadImages={true}
         navigation
-        pagination={{ clickable: false, type: 'fraction', }}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        pagination={{ clickable: false, type: 'fraction', el: '.swiper-pagination' }}
     >
         {items.map(({ html, uuid}) => <SwiperSlide key={uuid}>{html}</SwiperSlide>)}
+        <div className="c-card__quantity swiper-pagination" />
     </Swiper>
 );

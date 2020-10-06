@@ -1,20 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import CheckboxLabel from '../material-ui/CheckboxLabel/CheckboxLabel';
 import { Button } from '@material-ui/core';
 
 import { Checkbox } from '../patterns/Checkbox/Checkbox';
 
 import './Filters.scss';
 
-const getRegion = array => array.reduce((accum, [id, { address: { addressRegion } }]) => !addressRegion || accum.includes(addressRegion)
-    ? accum
-    : [ ...accum, addressRegion], []);
+const getCategory = (accum, category) => {
+    if (typeof category !== 'undefined') {
+        if (!accum[category]) {
+            return {
+                ...accum,
+                [category]: 1
+            }
+        }
 
-const getStars = array => array.reduce((accum, [id, { stars }]) => stars === undefined || accum.includes(stars)
-    ? accum
-    : [ ...accum, stars], []);
+        const updatedValue = accum[category] + 1;
+
+        return {
+            ...accum,
+            [category]: updatedValue
+        }
+    }
+
+    return { ...accum };
+};
+
+const getRegions = array => array.reduce((accum, [id, { address: { addressRegion } }]) => getCategory(accum, addressRegion), {});
+
+const getStars = array => array.reduce((accum, [id, { stars }]) => getCategory(accum, stars), {});
+
+const getTypes = array => array.reduce((accum, [id, { hotel_type_name }]) => getCategory(accum, hotel_type_name), {});
 
 export const Filters = ({
     hotels,
@@ -26,6 +43,7 @@ export const Filters = ({
 }) => {
     const [regions, setRegions] = useState([]);
     const [stars, setStars] = useState([]);
+    const [types, setTypes] = useState([]);
 
     const handleChange = (name, label) => {
         const isLabelExist = filters[name].includes(label);
@@ -37,19 +55,23 @@ export const Filters = ({
     };
 
     useEffect(() => {
-        let category = [];
+        let regions = [];
         let stars = [];
+        let types = [];
 
         if (firstHotels.length > 0 && hotels.length > 0) {
-            category = [...getRegion([...firstHotels, ...hotels])];
-            stars = [...getStars([...firstHotels, ...hotels])];
+            regions = getRegions([...firstHotels, ...hotels]);
+            stars = getStars([...firstHotels, ...hotels]);
+            types = getTypes([...firstHotels, ...hotels]);
         } else if (firstHotels.length > 0) {
-            category = [...getRegion(firstHotels)];
-            stars = [...getStars(firstHotels)];
+            regions = getRegions(firstHotels);
+            stars = getStars(firstHotels);
+            types = getTypes(firstHotels);
         }
 
-        setRegions(category);
+        setRegions(regions);
         setStars(stars);
+        setTypes(types);
     }, [firstHotels, hotels]);
 
     const setSort = sort => {
@@ -85,18 +107,19 @@ export const Filters = ({
                             Количество звезд
                         </div>
                         <div className="c-filter__list">
-                            {stars.length > 0 && (
-                                stars.map((label, index) => (
-                                    <Checkbox
-                                        key={index}
-                                        name="stars"
-                                        label={label}
-                                        labelAdditional="звёзды"
-                                        hotels="625"
-                                        handleChange={handleChange}
-                                    />
-                                ))
-                            )}
+                            {Object.keys(stars).length > 0 &&
+                                Object.keys(stars)
+                                    .sort((a, b) => b - a)
+                                    .map((label, index) => (
+                                        <Checkbox
+                                            key={index}
+                                            name="stars"
+                                            label={label}
+                                            labelAdditional="звёзды"
+                                            hotels={stars[label]}
+                                            handleChange={handleChange}
+                                        />
+                            ))}
                         </div>
                     </div>
                     <div className="c-filter__item">
@@ -135,138 +158,16 @@ export const Filters = ({
                             Тип размещения
                         </div>
                         <div className="c-filter__list">
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Апартаменты
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Гостевые дома
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Хостелы
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Отели
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Отели типа B&amp;B
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Дома на выходные
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Мини-отели
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Проживание в семье
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Виллы
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Ботели
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Апарт-отели
-                                                </span>
-                                        <span className="c-checkbox__count">
-                                                    675
-                                                </span>
-                                </label>
-                            </div>
+                            {Object.keys(types).length > 0 &&
+                                Object.keys(types).sort().map((label, index) => (
+                                    <Checkbox
+                                        key={index}
+                                        name="types"
+                                        label={label}
+                                        hotels={types[label]}
+                                        handleChange={handleChange}
+                                    />
+                            ))}
                         </div>
                     </div>
                     <div className="c-filter__item">
@@ -274,13 +175,13 @@ export const Filters = ({
                             Район
                         </div>
                         <div className="c-filter__list">
-                            {regions.length > 0 && (
-                                regions.map((label, index) =>
+                            {Object.keys(regions).length > 0 && (
+                                Object.keys(regions).sort().map((label, index) =>
                                     <Checkbox
                                         key={index}
                                         name="regions"
                                         label={label}
-                                        hotels="625"
+                                        hotels={regions[label]}
                                         handleChange={handleChange}
                                     />
                                 )

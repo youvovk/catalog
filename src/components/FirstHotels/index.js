@@ -6,6 +6,7 @@ import { loadFirstHotel } from "../../store/actions";
 const mapState2Props = (state) => {
     return {
         firstHotels: state.firstHotels,
+        hotels: state.hotels,
         filters: state.filters,
         page: state.page,
         total: state.total,
