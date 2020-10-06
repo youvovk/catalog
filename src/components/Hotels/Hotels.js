@@ -82,7 +82,7 @@ export const Hotels = (props) => {
         }
 
         if (filters.stars.length > 0) {
-            filtered = filtered.filter(([id, item]) => filters.stars.includes(item.stars));
+            filtered = filtered.filter(([id, item]) => filters.stars.includes(String(item.stars)));
         }
 
         if (filters.types.length > 0) {

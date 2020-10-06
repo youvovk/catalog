@@ -40,6 +40,7 @@ export const Filters = ({
     sorts,
     setFilter,
     setActiveSort,
+    isResetFilters
 }) => {
     const [regions, setRegions] = useState([]);
     const [stars, setStars] = useState([]);
@@ -47,11 +48,11 @@ export const Filters = ({
 
     const handleChange = (name, label) => {
         const isLabelExist = filters[name].includes(label);
-        const updateFilters = isLabelExist
+        const updatedFilters = isLabelExist
             ? filters[name].filter(item => item !== label)
             : [...filters[name], label];
 
-        setFilter(updateFilters, name);
+        setFilter(updatedFilters, name);
     };
 
     useEffect(() => {
@@ -72,7 +73,7 @@ export const Filters = ({
         setRegions(regions);
         setStars(stars);
         setTypes(types);
-    }, [firstHotels, hotels]);
+    }, [firstHotels, hotels, isResetFilters]);
 
     const setSort = sort => {
         const updateSort = sorts.includes(sort)
@@ -118,6 +119,7 @@ export const Filters = ({
                                             labelAdditional="звёзды"
                                             hotels={stars[label]}
                                             handleChange={handleChange}
+                                            isResetFilters={isResetFilters}
                                         />
                             ))}
                         </div>
@@ -166,6 +168,7 @@ export const Filters = ({
                                         label={label}
                                         hotels={types[label]}
                                         handleChange={handleChange}
+                                        isResetFilters={isResetFilters}
                                     />
                             ))}
                         </div>
@@ -183,6 +186,7 @@ export const Filters = ({
                                         label={label}
                                         hotels={regions[label]}
                                         handleChange={handleChange}
+                                        isResetFilters={isResetFilters}
                                     />
                                 )
                             )}

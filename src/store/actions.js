@@ -14,6 +14,7 @@ export const ACTION_TYPES = {
     START_LOADING: 'START_LOADING',
     STOP_LOADING: 'STOP_LOADING',
     PREPARE_HOTELS: 'PREPARE_HOTELS',
+    RESET_FILTERS: 'RESET_FILTERS',
 };
 
 let headers = new Headers();
@@ -89,12 +90,16 @@ export const setLimit = data => ({
     payload: data,
 });
 
-const startLoading = () => ({
+export const startLoading = () => ({
     type: ACTION_TYPES.START_LOADING,
 });
 
-const stopLoading = (limit) => ({
+export const stopLoading = (limit) => ({
     type: ACTION_TYPES.STOP_LOADING,
+});
+
+export const resetFilters = () => ({
+    type: ACTION_TYPES.RESET_FILTERS,
 });
 
 export const loadHotels = preparedHotels => (dispatch) => {

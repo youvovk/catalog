@@ -7,6 +7,7 @@ const mapState2Props = (state) => ({
     filters: state.filters,
     firstHotels: state.firstHotels,
     sorts: state.sorts,
+    isResetFilters: state.isResetFilters,
 });
 
 const mapDispatch2Props = dispatch => ({

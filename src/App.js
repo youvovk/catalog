@@ -31,6 +31,7 @@ export const App = ({
                         allHotels,
                         filteredHotelsLength,
                         setPage,
+                        resetFilters,
 }) => (
     <div className="l-body">
         <div className="l-container">
@@ -54,20 +55,28 @@ export const App = ({
 
                             <Line />
 
-                            <div className="l-row l-row--mt-20 l-row--max-1151-mt-10">
-                                <Apply items={[
-                                    { value: '2 звезды', uuid: '2 звезды' },
-                                    { value: 'Аппартаменты', uuid: 'Аппартаменты' },
-                                    { value: 'Неаполь', uuid: 'Неаполь' }
-                                ]} />
-                            </div>
+                            {filters.regions.length > 0 || filters.stars.length > 0 || filters.types.length > 0
+                                ? (
+                                    <div className="l-row l-row--mt-20 l-row--max-1151-mt-10">
+                                        <Apply
+                                            items={[
+                                                ...filters.regions,
+                                                ...filters.stars,
+                                                ...filters.types
+                                            ]}
+                                            handleChange={resetFilters}
+                                        />
+                                    </div>
+                                )
+                                : ''
+                            }
 
                             <FirstHotels />
                             <Hotels />
                         </div>
 
                         <Pagination
-                            count={filters.regions.length > 0 || filters.stars.length > 0
+                            count={filters.regions.length > 0 || filters.stars.length > 0 || filters.types.length > 0
                                 ? Math.round(filteredHotelsLength / limit)
                                 : Math.round(allHotels.length / limit)
                             }

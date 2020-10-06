@@ -19,6 +19,7 @@ const initialStore = {
     sorts: [],
     isLoading: false,
     error: null,
+    isResetFilters: false
 };
 
 export function rootReducer(state = initialStore, action) {
@@ -72,6 +73,7 @@ export function rootReducer(state = initialStore, action) {
                     ...state.filters,
                     [name]: payload
                 },
+                isResetFilters: false
             };
         }
 
@@ -150,6 +152,18 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 isLoading: false,
+            };
+        }
+
+        case ACTION_TYPES.RESET_FILTERS: {
+            return {
+                ...state,
+                filters: {
+                    regions: [],
+                    stars: [],
+                    types: [],
+                },
+                isResetFilters: true,
             };
         }
 
