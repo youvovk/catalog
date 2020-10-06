@@ -167,6 +167,18 @@ export function rootReducer(state = initialStore, action) {
             };
         }
 
+        case ACTION_TYPES.RESET_FILTER: {
+            const { payload, name } = action;
+
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    [name]: state.filters[name].filter(category => category !== payload)
+                },
+            };
+        }
+
         default:
             return state;
     }

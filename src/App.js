@@ -32,6 +32,7 @@ export const App = ({
                         filteredHotelsLength,
                         setPage,
                         resetFilters,
+                        resetFilter,
 }) => (
     <div className="l-body">
         <div className="l-container">
@@ -60,11 +61,12 @@ export const App = ({
                                     <div className="l-row l-row--mt-20 l-row--max-1151-mt-10">
                                         <Apply
                                             items={[
-                                                ...filters.regions,
-                                                ...filters.stars,
-                                                ...filters.types
+                                                ...filters.types.map(category => ({ category, name: 'types' })),
+                                                ...filters.regions.map(category => ({ category, name: 'regions' })),
+                                                ...filters.stars.map(category => ({ category, name: 'stars' }))
                                             ]}
-                                            handleChange={resetFilters}
+                                            handleChangeFilters={resetFilters}
+                                            handleChangeFilter={resetFilter}
                                         />
                                     </div>
                                 )

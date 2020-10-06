@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { App } from './App';
-import { setPage, setIsActiveSort, resetFilters } from './store/actions';
+import { setPage, setIsActiveSort, resetFilters, resetFilter } from './store/actions';
 
 const mapState2Props = (state) => ({
     limit: state.limit,
@@ -12,6 +12,7 @@ const mapState2Props = (state) => ({
 const mapDispatch2Props = dispatch => ({
     setPage: number => dispatch(setPage(number)),
     resetFilters: () =>  dispatch(resetFilters()),
+    resetFilter: (name, value) =>  dispatch(resetFilter(name, value)),
 });
 
 const Enhanced = connect(
