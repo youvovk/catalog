@@ -5,6 +5,7 @@ import { loadFirstHotel } from "../../store/actions";
 
 const mapState2Props = (state) => {
     return {
+        allHotels: Object.entries(state.allHotels),
         firstHotels: state.firstHotels,
         hotels: state.hotels,
         filters: state.filters,

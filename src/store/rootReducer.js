@@ -83,6 +83,7 @@ export function rootReducer(state = initialStore, action) {
                     [name]: payload
                 },
                 isResetFilters: false,
+                resetFilter: '',
             };
         }
 

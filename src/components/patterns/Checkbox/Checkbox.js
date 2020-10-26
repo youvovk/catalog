@@ -15,13 +15,10 @@ export const Checkbox = ({
     const [checked, setChecked] = useState(false);
 
     useEffect(() => {
-        if (isResetFilters) {
-            setChecked(false);
-        }
+        if (isResetFilters) setChecked(false);
 
-        if (resetFilter === label) {
-            setChecked(false);
-        }
+        if (resetFilter === value) setChecked(false);
+
     }, [isResetFilters, resetFilter]);
 
     return (

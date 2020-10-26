@@ -119,7 +119,7 @@ export const Hotels = (props) => {
         if (sorts.includes('id')) {
              filtered = [...filtered].sort((a, b) => Number(b[0]) - Number(a[0]));
         }
-        console.log(filtered)
+
         setFilteredHotels(filtered);
         setFilteredHotelsLength(filtered.length);
 

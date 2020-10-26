@@ -21,17 +21,18 @@ export const Filters = ({
     const [types, setTypes] = useState([]);
     const [facilities, setFacilities] = useState([]);
     const [prevFilterSelectedInfo, setPrevFilterSelectedInfo] = useState('');
-    const [isLabelExist, setIsLabelExist] = useState(false);
+    const [isFilterExist, setIsFilterExist] = useState(false);
+    const [prevFilteredHotelsLength, setPrevFilteredHotelsLength] = useState(0);
 
     const handleChange = (name, label) => {
-        const isLabelExist = filters[name].includes(label);
-        const updatedFilters = isLabelExist
+        const isFilterExist = filters[name].includes(label);
+        const updatedFilters = isFilterExist
             ? filters[name].filter(item => item !== label)
             : [...filters[name], label];
 
         setFilter(updatedFilters, name);
         setPrevFilterSelectedInfo(name);
-        setIsLabelExist(isLabelExist);
+        setIsFilterExist(isFilterExist);
     };
 
     useEffect(() => {
@@ -42,29 +43,51 @@ export const Filters = ({
 
         if (filteredHotels.length > 0) {
             if (prevFilterSelectedInfo !== 'districts'
-                || (prevFilterSelectedInfo === 'districts' && isLabelExist && filters.districts.length === 0))
+                || (prevFilterSelectedInfo === 'districts' && isFilterExist && filters.districts.length === 0))
             {
                 districtsFiltered = getCategory({ way: 'address', data: filteredHotels });
             }
 
             if (prevFilterSelectedInfo !== 'stars'
-                || (prevFilterSelectedInfo === 'stars' && isLabelExist && filters.stars.length === 0))
+                || (prevFilterSelectedInfo === 'stars' && isFilterExist && filters.stars.length === 0))
             {
                 starsFiltered = getCategory({ way: 'stars', data: filteredHotels });
             }
 
             if (prevFilterSelectedInfo !== 'types'
-                || (prevFilterSelectedInfo === 'types' && isLabelExist && filters.types.length === 0))
+                || (prevFilterSelectedInfo === 'types' && isFilterExist && filters.types.length === 0))
             {
                 typesFiltered = getCategory({ way: 'hotel_type_name', data: filteredHotels });
             }
 
             if (prevFilterSelectedInfo !== 'facilities'
-                || (prevFilterSelectedInfo === 'facilities' && isLabelExist && filters.facilities.length === 0))
+                || (prevFilterSelectedInfo === 'facilities' && isFilterExist && filters.facilities.length === 0))
             {
-                facilitiesFiltered = getCategory({ way: 'name', data: filteredHotels.reduce((accum, [id, hotel]) => (
-                    [ ...accum, ...Object.entries(hotel.facilities)]
-                ), []) });
+                facilitiesFiltered = getCategory({ way: 'name', data: allHotels.reduce((accum, [id, hotel]) => (
+                        [ ...accum, ...Object.entries(hotel.facilities)]
+                    ), []) });
+            }
+
+            // this is will rerender selected filters if loading API data don't end
+            const isNeedRerender = prevFilteredHotelsLength < filteredHotels.length;
+
+            if (isNeedRerender) {
+                switch (prevFilterSelectedInfo) {
+                    case 'districts': districtsFiltered = getCategory({ way: 'address', data: allHotels });
+                        break;
+                    case 'stars': starsFiltered = getCategory({ way: 'stars', data: allHotels });
+                        break;
+                    case 'types': typesFiltered = getCategory({ way: 'types', data: allHotels });
+                        break;
+                    case 'facilities': facilitiesFiltered = getCategory({
+                        way: 'name',
+                        data: allHotels.reduce((accum, [id, hotel]) => (
+                            [ ...accum, ...Object.entries(hotel.facilities)]
+                        ), []) });
+                        break;
+                    default: console.log('Filters component default');
+                        break;
+                }
             }
         }
 
@@ -72,6 +95,8 @@ export const Filters = ({
         setStars(starsFiltered);
         setTypes(typesFiltered);
         setFacilities(facilitiesFiltered);
+
+        setPrevFilteredHotelsLength(filteredHotels.length);
     }, [filteredHotels]);
 
     const setSort = sort => {
@@ -114,7 +139,7 @@ export const Filters = ({
                                         <Checkbox
                                             key={label}
                                             name="stars"
-                                            additionalClass={setClassForFilterItem (prevFilterSelectedInfo, stars[label])}
+                                            additionalClass={setClassForFilterItem(prevFilterSelectedInfo, stars[label])}
                                             label={{ label: label === '0' ? 'без звёзд' : label, value: label }}
                                             labelAdditional={label === '0' ? '' : 'звезды'}
                                             hotels={stars[label] ? stars[label] : 0}
@@ -167,7 +192,7 @@ export const Filters = ({
                                         key={label}
                                         name="types"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem (prevFilterSelectedInfo, types[label])}
+                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, types[label])}
                                         hotels={types[label] ? types[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
@@ -187,7 +212,7 @@ export const Filters = ({
                                         key={label}
                                         name="districts"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem (prevFilterSelectedInfo, districts[label])}
+                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, districts[label])}
                                         hotels={districts[label] ? districts[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
@@ -304,7 +329,7 @@ export const Filters = ({
                                         key={label}
                                         name="facilities"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem (prevFilterSelectedInfo, facilities[label])}
+                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, facilities[label])}
                                         hotels={facilities[label] ? facilities[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
