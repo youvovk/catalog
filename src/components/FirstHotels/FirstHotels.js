@@ -8,8 +8,6 @@ import { Card } from '../patterns/Card/index';
 import { Loader } from '../Loader/index';
 import { Error } from '../Error/index';
 
-import './FirstHotels.scss';
-
 export const FirstHotels = (props) => {
     const {
         firstHotels,

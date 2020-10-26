@@ -3,11 +3,13 @@ import { Filters } from './Filters';
 import { setFilter, setActiveSort } from "../../store/actions";
 
 const mapState2Props = (state) => ({
-    hotels: state.hotels,
+    allHotels: Object.entries(state.allHotels),
+    filteredHotels: state.filteredHotels,
+    allFilters: state.allFilters,
     filters: state.filters,
-    firstHotels: state.firstHotels,
     sorts: state.sorts,
     isResetFilters: state.isResetFilters,
+    resetFilter: state.resetFilter,
 });
 
 const mapDispatch2Props = dispatch => ({

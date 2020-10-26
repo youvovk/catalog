@@ -9,7 +9,10 @@ export const Slider = ({ items }) => (
     <Swiper
         spaceBetween={50}
         slidesPerView={1}
-        lazy={true}
+        lazy={{
+            loadPrevNext: true,
+            loadPrevNextAmount: 2
+        }}
         preloadImages={true}
         navigation
         pagination={{ clickable: false, type: 'fraction', el: '.swiper-pagination' }}

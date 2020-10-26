@@ -4,8 +4,6 @@ import React from 'react';
 import { Input } from '../patterns/Input/Input';
 import { Row } from '../patterns/Row/Row';
 
-import './Form.scss';
-
 export const Form = () => (
     <form className="c-booking c-booking--vertical c-form">
         <Row className="c-booking__row">

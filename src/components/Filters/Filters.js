@@ -1,50 +1,44 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-
 import { Button } from '@material-ui/core';
 
 import { Checkbox } from '../patterns/Checkbox/Checkbox';
 
-import './Filters.scss';
+const getCategory = ({ data, way }) => data.reduce((accum, [id, item]) => {
+    let category = item[way];
 
-const getCategory = (accum, category) => {
+    if (way === 'address') {
+        category = item[way].addressRegion;
+    }
+
     if (typeof category !== 'undefined') {
-        if (!accum[category]) {
-            return {
-                ...accum,
-                [category]: 1
-            }
-        }
+
+        if (!accum[category]) return { ...accum, [category]: 1 };
 
         const updatedValue = accum[category] + 1;
 
-        return {
-            ...accum,
-            [category]: updatedValue
-        }
+        return { ...accum, [category]: updatedValue };
     }
 
     return { ...accum };
-};
-
-const getRegions = array => array.reduce((accum, [id, { address: { addressRegion } }]) => getCategory(accum, addressRegion), {});
-
-const getStars = array => array.reduce((accum, [id, { stars }]) => getCategory(accum, stars), {});
-
-const getTypes = array => array.reduce((accum, [id, { hotel_type_name }]) => getCategory(accum, hotel_type_name), {});
+}, {});
 
 export const Filters = ({
-    hotels,
-    firstHotels,
+    allHotels,
+    filteredHotels,
     filters,
     sorts,
     setFilter,
     setActiveSort,
-    isResetFilters
+    isResetFilters,
+    resetFilter,
+    allFilters
 }) => {
     const [regions, setRegions] = useState([]);
     const [stars, setStars] = useState([]);
     const [types, setTypes] = useState([]);
+    const [prevFilterSelectedInfo, setPrevFilterSelectedInfo] = useState('');
+    const [isLabelExist, setIsLabelExist] = useState([]);
 
     const handleChange = (name, label) => {
         const isLabelExist = filters[name].includes(label);
@@ -53,27 +47,43 @@ export const Filters = ({
             : [...filters[name], label];
 
         setFilter(updatedFilters, name);
+        setPrevFilterSelectedInfo(name);
+        setIsLabelExist(isLabelExist);
     };
 
     useEffect(() => {
-        let regions = [];
-        let stars = [];
-        let types = [];
+        let regionsFiltered = regions;
+        let starsFiltered = stars;
+        let typesFiltered = types;
 
-        if (firstHotels.length > 0 && hotels.length > 0) {
-            regions = getRegions([...firstHotels, ...hotels]);
-            stars = getStars([...firstHotels, ...hotels]);
-            types = getTypes([...firstHotels, ...hotels]);
-        } else if (firstHotels.length > 0) {
-            regions = getRegions(firstHotels);
-            stars = getStars(firstHotels);
-            types = getTypes(firstHotels);
+        if (filteredHotels.length > 0) {
+            if (prevFilterSelectedInfo !== 'regions') {
+                //console.log(prevFilterInfo, prevFilterInfo !== 'regions', 1)
+                regionsFiltered = getCategory({ way: 'address', data: filteredHotels });
+            }
+
+
+
+            if (prevFilterSelectedInfo !== 'stars') {
+                //console.log(prevFilterInfo, prevFilterInfo !== 'stars', 2)
+                starsFiltered = getCategory({ way: 'stars', data: filteredHotels });
+                //console.log(filteredHotels)
+            }
+
+
+
+            if (prevFilterSelectedInfo !== 'types') {
+                //console.log(prevFilterInfo, prevFilterInfo !== 'types', 3)
+                typesFiltered = getCategory({ way: 'hotel_type_name', data: filteredHotels });
+            }
+
+
         }
 
-        setRegions(regions);
-        setStars(stars);
-        setTypes(types);
-    }, [firstHotels, hotels, isResetFilters]);
+        setRegions(regionsFiltered);
+        setStars(starsFiltered);
+        setTypes(typesFiltered);
+    }, [filteredHotels]);
 
     const setSort = sort => {
         const updateSort = sorts.includes(sort)
@@ -89,11 +99,11 @@ export const Filters = ({
             {/*<Button variant="contained" color="primary" onClick={() => setSort('id')}>Sort by id</Button>*/}
 
             <form className="c-filter" id="c-filter">
-                <a className="c-filter__map" href="/">
+                <div className="c-filter__map">
                     <div className="c-filter__map--title">
                         Посмотреть на карте
                     </div>
-                </a>
+                </div>
                 <div className="c-filter__header">
                     <div className="c-filter__header--title c-filter__close">
                         Фильтры
@@ -108,18 +118,20 @@ export const Filters = ({
                             Количество звезд
                         </div>
                         <div className="c-filter__list">
-                            {Object.keys(stars).length > 0 &&
-                                Object.keys(stars)
+                            {Object.keys(allFilters.stars).length > 0 &&
+                                Object.keys(allFilters.stars)
                                     .sort((a, b) => b - a)
-                                    .map((label, index) => (
+                                    .map(label => (
                                         <Checkbox
-                                            key={index}
+                                            key={label}
                                             name="stars"
-                                            label={label}
-                                            labelAdditional="звёзды"
-                                            hotels={stars[label]}
+                                            additionalClass={stars[label] ? '' : 'disabled'}
+                                            label={{ label: label === '0' ? 'без звёзд' : label, value: label }}
+                                            labelAdditional={label === '0' ? '' : 'звезды'}
+                                            hotels={stars[label] ? stars[label] : 0}
                                             handleChange={handleChange}
                                             isResetFilters={isResetFilters}
+                                            resetFilter={resetFilter}
                                         />
                             ))}
                         </div>
@@ -160,15 +172,17 @@ export const Filters = ({
                             Тип размещения
                         </div>
                         <div className="c-filter__list">
-                            {Object.keys(types).length > 0 &&
-                                Object.keys(types).sort().map((label, index) => (
+                            {Object.keys(allFilters.types).length > 0 &&
+                                Object.keys(allFilters.types).sort().map(label => (
                                     <Checkbox
-                                        key={index}
+                                        key={label}
                                         name="types"
-                                        label={label}
-                                        hotels={types[label]}
+                                        label={{ label: label, value: label }}
+                                        additionalClass={types[label] ? '' : 'disabled'}
+                                        hotels={types[label] ? types[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
+                                        resetFilter={resetFilter}
                                     />
                             ))}
                         </div>
@@ -178,15 +192,17 @@ export const Filters = ({
                             Район
                         </div>
                         <div className="c-filter__list">
-                            {Object.keys(regions).length > 0 && (
-                                Object.keys(regions).sort().map((label, index) =>
+                            {Object.keys(allFilters.regions).length > 0 && (
+                                Object.keys(allFilters.regions).sort().map(label =>
                                     <Checkbox
-                                        key={index}
+                                        key={label}
                                         name="regions"
-                                        label={label}
-                                        hotels={regions[label]}
+                                        label={{ label: label, value: label }}
+                                        additionalClass={regions[label] ? '' : 'disabled'}
+                                        hotels={regions[label] ? regions[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
+                                        resetFilter={resetFilter}
                                     />
                                 )
                             )}
@@ -458,15 +474,15 @@ export const Filters = ({
                                     <input type="checkbox" name="checkbox" />
                                         <span className="c-checkbox__icon" />
                                         <span className="c-checkbox__title">
-                                                    Виллы Лондона
-                                                </span>
+                                            Виллы Лондона
+                                        </span>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="c-filter__footer">
-                    <a className="c-button c-button--blue c-filter__button c-filter__close" href="javascript:void(0)">
+                    <a className="c-button c-button--blue c-filter__button c-filter__close">
                         Применить фильтры
                     </a>
                 </div>

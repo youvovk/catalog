@@ -1,30 +1,40 @@
 import React, {useEffect, useState} from 'react';
 
-import './Checkbox.scss';
+const classNames = require('classnames');
 
 export const Checkbox = ({
-                         name,
-                         label,
-                         labelAdditional,
-                         hotels,
-                         handleChange,
-                         isResetFilters
-                     }) => {
-
+     name,
+     label: { label, value },
+     labelAdditional,
+     additionalClass,
+     hotels,
+     handleChange,
+     isResetFilters,
+     resetFilter
+ }) => {
     const [checked, setChecked] = useState(false);
 
     useEffect(() => {
-        setChecked(false);
-    }, [isResetFilters]);
+        if (isResetFilters) {
+            setChecked(false);
+        }
+
+        if (resetFilter === label) {
+            setChecked(false);
+        }
+    }, [isResetFilters, resetFilter]);
 
     return (
-        <div className="c-checkbox" >
+        <div className={classNames('c-checkbox', { [additionalClass]: !!additionalClass })}>
             <label className="c-checkbox__label">
                 <input
-                    type="checkbox" name="checkbox"
-                    onChange={() => setChecked(!checked)}
-                    onClick={() => handleChange(name, label)}
-                    checked={checked}
+                    type="checkbox"
+                    name="checkbox"
+                    className={checked && !additionalClass ? 'c-checkbox__input--checked' : ''}
+                    onClick={() => {
+                        handleChange(name, value);
+                        setChecked(!checked);
+                    }}
                 />
                 <span className="c-checkbox__icon" />
                 <span className="c-checkbox__title">{label} {labelAdditional}</span>

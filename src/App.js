@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
 import Pagination from '@material-ui/lab/Pagination';
 
 import { Hotels } from './components/Hotels/index';
@@ -17,7 +16,6 @@ import { Line } from './components/patterns/Line/Line';
 import { Apply } from './components/patterns/Apply/Apply';
 
 // import styles
-import './App.scss';
 import './styles/styles.scss';
 
 import 'swiper/swiper.scss';
@@ -48,7 +46,14 @@ export const App = ({
                         <div className="c-page__hotels">
                             <div className="l-row l-row--flex l-row--between l-row--mt-0 min-1152">
                                 <div className="c-title c-title--fs-24 c-title--fw-600 c-title--left">
-                                    Отели Лондона: найден 3 391 вариант
+                                    Отели Лондона: найден
+                                    {filters.regions.length > 0
+                                        || filters.stars.length > 0
+                                        || filters.types.length > 0
+                                            ? ` ${filteredHotelsLength} `
+                                            : ` ${allHotels.length} `
+                                    }
+                                    вариантов
                                 </div>
 
                                 <Dropdown />
@@ -61,9 +66,9 @@ export const App = ({
                                     <div className="l-row l-row--mt-20 l-row--max-1151-mt-10">
                                         <Apply
                                             items={[
-                                                ...filters.types.map(category => ({ category, name: 'types' })),
-                                                ...filters.regions.map(category => ({ category, name: 'regions' })),
-                                                ...filters.stars.map(category => ({ category, name: 'stars' }))
+                                                ...filters.types.map(category => ({ label: category, category, name: 'types' })),
+                                                ...filters.regions.map(category => ({ label: category, category, name: 'regions' })),
+                                                ...filters.stars.map(category => ({ label: category, category, name: 'stars' }))
                                             ]}
                                             handleChangeFilters={resetFilters}
                                             handleChangeFilter={resetFilter}
@@ -92,4 +97,6 @@ export const App = ({
 );
 
 App.propTypes = {};
+
+
 

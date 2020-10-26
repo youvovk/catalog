@@ -6,6 +6,23 @@
     display: none;
   }
 
+  &.disabled {
+    pointer-events: none;
+
+    .c-checkbox__title,
+    .c-checkbox__count {
+      color: $gray;
+
+      &:hover {
+        color: $gray;
+      }
+    }
+
+    .c-checkbox__icon {
+      border: 1px solid $gray;
+    }
+  }
+
   &__label {
     display: flex;
     align-items: center;
@@ -65,7 +82,7 @@
     }
   }
 
-  :checked {
+  &__input--checked {
 
     // ~ .c-checkbox__title {
     //     color: @purple;

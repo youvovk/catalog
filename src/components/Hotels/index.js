@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Hotels } from './Hotels';
-import { loadHotels, setLimit, prepareHotels, setFilteredHotelsLength } from "../../store/actions";
+import { loadHotels, setLimit, prepareHotels, setFilteredHotelsLength, setFilteredHotels } from "../../store/actions";
 // import { selectorRestaurants } from './store/selectors';
 
 const mapState2Props = (state) => {
@@ -22,6 +22,7 @@ const mapDispatch2Props = dispatch => ({
     loadHotels: preparedHotels => dispatch(loadHotels(preparedHotels)),
     setLimit: limit => dispatch(setLimit(limit)),
     setFilteredHotelsLength: length => dispatch(setFilteredHotelsLength(length)),
+    setFilteredHotels: filteredHotels => dispatch(setFilteredHotels(filteredHotels)),
 });
 
 const Enhanced = connect(

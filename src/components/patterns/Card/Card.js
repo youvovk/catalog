@@ -29,7 +29,7 @@ export const Card = ({ card = {} }) => {
     );
 
     const title = ({ title }) => (
-        <a className="c-card__title" href="javascript:void(0)">
+        <a className="c-card__title" href="">
             {title}
         </a>
     );
@@ -68,7 +68,7 @@ export const Card = ({ card = {} }) => {
     const group = ({ address, district, city, country, fromCenter }) => (
         <div className="c-card--group">
             <div className="c-card__row">
-                <a className="c-card__location" href="javascript:void(0)"
+                <a className="c-card__location" href=""
                    title={`${address}, ${district}, ${city}, ${country}`}>
                     <svg className="icon icon--pin"><use href="images/_sprite.svg#icon--pin" /></svg>
                     <span className="c-card__location--address">{address && `${address}, `}</span>
@@ -80,7 +80,7 @@ export const Card = ({ card = {} }) => {
             <div className="c-card__row">
                 <div className="c-card__distance">{fromCenter}</div>
                 <div className="c-card__dot" />
-                <a className="c-card__map" href="javascript:void(0)">Показать на карте</a>
+                <a className="c-card__map" href="">Показать на карте</a>
             </div>
         </div>
     );
@@ -148,7 +148,7 @@ export const Card = ({ card = {} }) => {
               </div>
           </div>
           <div className="c-card__column">
-              <a className="c-card__buy--button c-card__buy--blue" href="javascript:void(0)">
+              <a className="c-card__buy--button c-card__buy--blue" href="">
                   Забронировать
               </a>
           </div>
@@ -190,13 +190,13 @@ export const Card = ({ card = {} }) => {
                             На Booking.com
                         </div>
                         <div className="c-card__buy--price c-card--mt-0">{String(rate).split(' ')[0]} <span>USD</span></div>
-                        <a className="c-card__buy--button" href="javascript:void(0)">
+                        <a className="c-card__buy--button" href="">
                             Выбрать
                         </a>
                         <div className="c-card__buy--days">
                             за 5 ночей
                         </div>
-                        <a className="c-card__buy--compare" href="javascript:void(0)">
+                        <a className="c-card__buy--compare" href="">
                             Сравнить 5 поставщиков
                         </a>
                     </>
@@ -245,7 +245,7 @@ export const Card = ({ card = {} }) => {
         if (options.isPlural || options.isEmpty) {
             return (
                 <div className="c-card__right min-1152">
-                    {rating({ review: cnt, number: val, text: word })}
+                    {Number(val) !== 0 ? rating({ review: cnt, number: val, text: word }) : ''}
 
                     {buy({ rate: minrate })}
                 </div>

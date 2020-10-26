@@ -281,6 +281,7 @@
   &__rating {
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
 
     @media (min-width: 768px) {
       flex-direction: column;
@@ -358,7 +359,6 @@
 
   &__buy {
     text-align: center;
-    margin-top: 10px;
 
     > * {
       margin-top: 10px;

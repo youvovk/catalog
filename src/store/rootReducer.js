@@ -4,6 +4,7 @@ const initialStore = {
     allHotels: {},
     hotels: [],
     firstHotels: [],
+    filteredHotels: [],
     filteredHotelsLength: null,
     page: 1,
     isActiveFilters: false,
@@ -19,7 +20,13 @@ const initialStore = {
     sorts: [],
     isLoading: false,
     error: null,
-    isResetFilters: false
+    isResetFilters: false,
+    resetFilter: '',
+    allFilters: {
+        regions: {},
+        stars: {},
+        types: {},
+    },
 };
 
 export function rootReducer(state = initialStore, action) {
@@ -73,7 +80,16 @@ export function rootReducer(state = initialStore, action) {
                     ...state.filters,
                     [name]: payload
                 },
-                isResetFilters: false
+                isResetFilters: false,
+            };
+        }
+
+        case ACTION_TYPES.SET_FILTERED_HOTELS: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                filteredHotels: payload,
             };
         }
 
@@ -174,7 +190,21 @@ export function rootReducer(state = initialStore, action) {
                 ...state,
                 filters: {
                     ...state.filters,
-                    [name]: state.filters[name].filter(category => category !== payload)
+                    [name]: state.filters[name].filter(category => category !== payload),
+                },
+                resetFilter: payload,
+            };
+        }
+
+        case ACTION_TYPES.SAVE_FILTERS: {
+            const { payload } = action;
+
+            return {
+                ...state,
+                allFilters: {
+                    regions: { ...state.allFilters.regions, ...payload.regions },
+                    stars: { ...state.allFilters.stars, ...payload.stars },
+                    types: { ...state.allFilters.types, ...payload.types },
                 },
             };
         }

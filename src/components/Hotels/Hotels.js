@@ -10,8 +10,6 @@ import { Error } from '../Error/index';
 
 import { url } from '../../store/actions';
 
-import './Hotels.scss';
-
 export const Hotels = (props) => {
     const [preparedHotels, prepareHotels] = useState([]);
     const [offsetHotels, setOffsetHotels] = useState(25);
@@ -32,6 +30,7 @@ export const Hotels = (props) => {
         loadHotels,
         setLimit,
         setFilteredHotelsLength,
+        setFilteredHotels: setFilteredHotelsStore,
     } = props;
 
     useEffect(() => {
@@ -77,16 +76,27 @@ export const Hotels = (props) => {
 
         let filtered = allHotels.length > 0 ? allHotels : [];
 
-        if (filters.regions.length > 0) {
-            filtered = filtered.filter(([id, item]) => filters.regions.includes(item.address.addressRegion))
-        }
+        if (filters.regions.length > 0
+            || filters.stars.length > 0
+            || filters.types.length > 0
+        ) {
+            filtered = filtered.filter(([id, item]) => {
+                let result = [];
 
-        if (filters.stars.length > 0) {
-            filtered = filtered.filter(([id, item]) => filters.stars.includes(String(item.stars)));
-        }
+                if (filters.regions.length > 0) {
+                    result = [...result, filters.regions.includes(item.address.addressRegion)];
+                }
 
-        if (filters.types.length > 0) {
-            filtered = filtered.filter(([id, item]) => filters.types.includes(item.hotel_type_name));
+                if (filters.stars.length > 0) {
+                    result = [...result, filters.stars.includes(String(item.stars))];
+                }
+
+                if (filters.types.length > 0) {
+                    result = [...result, filters.types.includes(item.hotel_type_name)];
+                }
+
+                return !result.includes(false);
+            });
         }
 
         if (sorts.includes('id')) {
@@ -95,6 +105,8 @@ export const Hotels = (props) => {
 
         setFilteredHotels(filtered);
         setFilteredHotelsLength(filtered.length);
+
+        setFilteredHotelsStore(filtered);
     }, [filters, firstHotels, hotels, sorts]);
 
     if (isLoading) {
@@ -163,7 +175,7 @@ export const Hotels = (props) => {
                     {/*</div>*/}
                     {/*<div className="c-card__center">*/}
                     {/*    <div className="c-card__row">*/}
-                    {/*        <a className="c-card__title" href="javascript:void(0)">*/}
+                    {/*        <a className="c-card__title" href="">*/}
                     {/*            Ibis Budget Auckland Airport*/}
                     {/*        </a>*/}
                     {/*    </div>*/}
@@ -192,7 +204,7 @@ export const Hotels = (props) => {
                     {/*    <div className="c-card__row">*/}
                     {/*        <div className="c-card--group">*/}
                     {/*            <div className="c-card__row">*/}
-                    {/*                <a className="c-card__location" href="javascript:void(0)"*/}
+                    {/*                <a className="c-card__location" href=""*/}
                     {/*                   title="Урочище Наталка, ул. 2-я линия, 26, Оболонский район, Киев, Украина">*/}
                     {/*                    <svg className="icon icon--pin">*/}
                     {/*                        <use href="images/_sprite.svg#icon--pin" />*/}
@@ -219,7 +231,7 @@ export const Hotels = (props) => {
                     {/*                    200 м от центра*/}
                     {/*                </div>*/}
                     {/*                <div className="c-card__dot" />*/}
-                    {/*                <a className="c-card__map" href="javascript:void(0)">*/}
+                    {/*                <a className="c-card__map" href="">*/}
                     {/*                    Показать на карте*/}
                     {/*                </a>*/}
                     {/*            </div>*/}
@@ -326,7 +338,7 @@ export const Hotels = (props) => {
                     {/*    <div className="c-card__row c-card--flex-between c-card--column-max-1151 c-card--align-start">*/}
                     {/*        <div className="c-card__column">*/}
                     {/*            <div className="c-card__row">*/}
-                    {/*                <a className="c-card__title" href="javascript:void(0)">*/}
+                    {/*                <a className="c-card__title" href="">*/}
                     {/*                    Ibis Budget Auckland Airport*/}
                     {/*                </a>*/}
                     {/*            </div>*/}
@@ -384,7 +396,7 @@ export const Hotels = (props) => {
                     {/*    <div className="c-card__row">*/}
                     {/*        <div className="c-card--group">*/}
                     {/*            <div className="c-card__row">*/}
-                    {/*                <a className="c-card__location" href="javascript:void(0)"*/}
+                    {/*                <a className="c-card__location" href=""*/}
                     {/*                   title="Урочище Наталка, ул. 2-я линия, 26, Оболонский район, Киев, Украина">*/}
                     {/*                    <svg className="icon icon--pin">*/}
                     {/*                        <use href="images/_sprite.svg#icon--pin" />*/}
@@ -411,7 +423,7 @@ export const Hotels = (props) => {
                     {/*                    200 м от центра*/}
                     {/*                </div>*/}
                     {/*                <div className="c-card__dot" />*/}
-                    {/*                <a className="c-card__map" href="javascript:void(0)">*/}
+                    {/*                <a className="c-card__map" href="">*/}
                     {/*                    Показать на карте*/}
                     {/*                </a>*/}
                     {/*            </div>*/}
@@ -551,7 +563,7 @@ export const Hotels = (props) => {
                     {/*    <div className="c-card__row c-card--flex-between">*/}
                     {/*        <div className="c-card__column">*/}
                     {/*            <div className="c-card__row">*/}
-                    {/*                <a className="c-card__title" href="javascript:void(0)">*/}
+                    {/*                <a className="c-card__title" href="">*/}
                     {/*                    Ibis Budget Auckland Airport*/}
                     {/*                </a>*/}
                     {/*            </div>*/}
@@ -609,7 +621,7 @@ export const Hotels = (props) => {
                     {/*    <div className="c-card__row">*/}
                     {/*        <div className="c-card--group">*/}
                     {/*            <div className="c-card__row">*/}
-                    {/*                <a className="c-card__location" href="javascript:void(0)"*/}
+                    {/*                <a className="c-card__location" href=""*/}
                     {/*                   title="Урочище Наталка, ул. 2-я линия, 26, Оболонский район, Киев, Украина">*/}
                     {/*                    <svg className="icon icon--pin">*/}
                     {/*                        <use href="images/_sprite.svg#icon--pin" />*/}
@@ -636,7 +648,7 @@ export const Hotels = (props) => {
                     {/*                    200 м от центра*/}
                     {/*                </div>*/}
                     {/*                <div className="c-card__dot" />*/}
-                    {/*                <a className="c-card__map" href="javascript:void(0)">*/}
+                    {/*                <a className="c-card__map" href="">*/}
                     {/*                    Показать на карте*/}
                     {/*                </a>*/}
                     {/*            </div>*/}

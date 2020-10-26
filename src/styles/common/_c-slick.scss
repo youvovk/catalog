@@ -107,6 +107,11 @@
       height: 100%;
       object-fit: cover;
       position: absolute;
+      background-color: #e5ecf5;
+      background-image: url(../../images/no_photo.svg);
+      background-repeat: no-repeat;
+      background-position: 50%;
+      background-size: 35%;
     }
   
     .c-slick__arrow {
@@ -159,8 +164,9 @@
       z-index: 9;
     }
 
-    .swiper-lazy-preloader {
-      background-color: #e5ecf5;
+    .swiper-lazy-preloader,
+    .swiper-wrapper {
+      background-color: $lazy-before;
       background-image: url(../../images/no_photo.svg);
       background-repeat: no-repeat;
       background-position: 50%;
