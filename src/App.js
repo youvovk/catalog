@@ -74,7 +74,7 @@ export const App = ({
                                             items={[
                                                 ...filters.types.map(category => ({ label: category, category, name: 'types' })),
                                                 ...filters.districts.map(category => ({ label: category, category, name: 'districts' })),
-                                                ...filters.stars.map(category => ({ label: category, category, name: 'stars' })),
+                                                ...filters.stars.map(category => ({ label: `${category} звезды`, category, name: 'stars' })),
                                                 ...filters.facilities.map(category => ({ label: category, category, name: 'facilities' }))
                                             ]}
                                             handleChangeFilters={resetFilters}
