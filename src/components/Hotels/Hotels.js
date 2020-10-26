@@ -51,8 +51,8 @@ export const Hotels = (props) => {
         // if (hotels.length > 0) {
         //     let filtered = hotels;
         //
-        //     if (filters.regions.length > 0) {
-        //         filtered = filtered.filter(([id, item]) => filters.regions.includes(item.address.addressRegion))
+        //     if (filters.districts.length > 0) {
+        //         filtered = filtered.filter(([id, item]) => filters.districts.includes(item.address.addressRegion))
         //     }
         //
         //     if (filters.stars.length > 0) {
@@ -63,8 +63,8 @@ export const Hotels = (props) => {
         // } else if (firstHotels) {
         //     let filtered = firstHotels;
         //
-        //     if (filters.regions.length > 0) {
-        //         filtered = filtered.filter(([id, item]) => filters.regions.includes(item.address.addressRegion))
+        //     if (filters.districts.length > 0) {
+        //         filtered = filtered.filter(([id, item]) => filters.districts.includes(item.address.addressRegion))
         //     }
         //
         //     if (filters.stars.length > 0) {
@@ -76,15 +76,15 @@ export const Hotels = (props) => {
 
         let filtered = allHotels.length > 0 ? allHotels : [];
 
-        if (filters.regions.length > 0
+        if (filters.districts.length > 0
             || filters.stars.length > 0
             || filters.types.length > 0
         ) {
             filtered = filtered.filter(([id, item]) => {
                 let result = [];
 
-                if (filters.regions.length > 0) {
-                    result = [...result, filters.regions.includes(item.address.addressRegion)];
+                if (filters.districts.length > 0) {
+                    result = [...result, filters.districts.includes(item.address.addressRegion)];
                 }
 
                 if (filters.stars.length > 0) {

@@ -9,9 +9,10 @@ const initialStore = {
     page: 1,
     isActiveFilters: false,
     filters: {
-        regions: [],
+        districts: [],
         stars: [],
         types: [],
+        facilities: [],
     },
     isActiveSort: false,
     total: 0,
@@ -23,9 +24,10 @@ const initialStore = {
     isResetFilters: false,
     resetFilter: '',
     allFilters: {
-        regions: {},
+        districts: {},
         stars: {},
         types: {},
+        facilities: {},
     },
 };
 
@@ -175,9 +177,10 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 filters: {
-                    regions: [],
+                    districts: [],
                     stars: [],
                     types: [],
+                    facilities: [],
                 },
                 isResetFilters: true,
             };
@@ -202,9 +205,10 @@ export function rootReducer(state = initialStore, action) {
             return {
                 ...state,
                 allFilters: {
-                    regions: { ...state.allFilters.regions, ...payload.regions },
+                    districts: { ...state.allFilters.districts, ...payload.districts },
                     stars: { ...state.allFilters.stars, ...payload.stars },
                     types: { ...state.allFilters.types, ...payload.types },
+                    facilities: { ...state.allFilters.facilities, ...payload.facilities },
                 },
             };
         }

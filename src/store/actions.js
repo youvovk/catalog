@@ -1,3 +1,4 @@
+import { getCategory } from '../fixtures/index';
 
 export const ACTION_TYPES = {
     SAVE_HOTELS: 'SAVE_HOTELS',
@@ -121,25 +122,6 @@ export const saveFilters = data => ({
     payload: data,
 });
 
-const getCategory = ({ data, way }) => data.reduce((accum, [id, item]) => {
-    let category = item[way];
-
-    if (way === 'address') {
-        category = item[way].addressRegion;
-    }
-
-    if (typeof category !== 'undefined') {
-
-        if (!accum[category]) return { ...accum, [category]: 1 };
-
-        const updatedValue = accum[category] + 1;
-
-        return { ...accum, [category]: updatedValue };
-    }
-
-    return { ...accum };
-}, {});
-
 export const loadHotels = preparedHotels => (dispatch) => {
     preparedHotels.forEach(url => {
         fetch(url, init)
@@ -152,11 +134,11 @@ export const loadHotels = preparedHotels => (dispatch) => {
                 } = response;
 
                 const dataValue = Object.entries(data);
-                const regions = getCategory({ way: 'address', data: dataValue });
+                const districts = getCategory({ way: 'address', data: dataValue });
                 const stars = getCategory({ way: 'stars', data: dataValue });
                 const types = getCategory({ way: 'hotel_type_name', data: dataValue });
 
-                dispatch(saveFilters({ regions: { ...regions }, stars: { ...stars }, types: { ...types } }));
+                dispatch(saveFilters({ districts: { ...districts }, stars: { ...stars }, types: { ...types } }));
                 dispatch(saveHotels(data));
             })
             .catch(error => dispatch(setError(error.message)))
@@ -178,7 +160,7 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
             } = response;
 
             const dataValue = Object.entries(data);
-            const regions = getCategory({ way: 'address', data: dataValue });
+            const districts = getCategory({ way: 'address', data: dataValue });
             const stars = getCategory({ way: 'stars', data: dataValue });
             const types = getCategory({ way: 'hotel_type_name', data: dataValue });
 
@@ -186,7 +168,7 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
             dispatch(setOffset(25));
             dispatch(setLimit(50));
             dispatch(saveFirstHotel(data));
-            dispatch(saveFilters({ regions: { ...regions }, stars: { ...stars }, types: { ...types } }));
+            dispatch(saveFilters({ districts: { ...districts }, stars: { ...stars }, types: { ...types } }));
         })
         .catch(error => dispatch(setError(error.message)))
         .finally(() => dispatch(stopLoading()));

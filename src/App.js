@@ -47,7 +47,7 @@ export const App = ({
                             <div className="l-row l-row--flex l-row--between l-row--mt-0 min-1152">
                                 <div className="c-title c-title--fs-24 c-title--fw-600 c-title--left">
                                     Отели Лондона: найден
-                                    {filters.regions.length > 0
+                                    {filters.districts.length > 0
                                         || filters.stars.length > 0
                                         || filters.types.length > 0
                                             ? ` ${filteredHotelsLength} `
@@ -61,13 +61,13 @@ export const App = ({
 
                             <Line />
 
-                            {filters.regions.length > 0 || filters.stars.length > 0 || filters.types.length > 0
+                            {filters.districts.length > 0 || filters.stars.length > 0 || filters.types.length > 0
                                 ? (
                                     <div className="l-row l-row--mt-20 l-row--max-1151-mt-10">
                                         <Apply
                                             items={[
                                                 ...filters.types.map(category => ({ label: category, category, name: 'types' })),
-                                                ...filters.regions.map(category => ({ label: category, category, name: 'regions' })),
+                                                ...filters.districts.map(category => ({ label: category, category, name: 'districts' })),
                                                 ...filters.stars.map(category => ({ label: category, category, name: 'stars' }))
                                             ]}
                                             handleChangeFilters={resetFilters}
@@ -83,7 +83,7 @@ export const App = ({
                         </div>
 
                         <Pagination
-                            count={filters.regions.length > 0 || filters.stars.length > 0 || filters.types.length > 0
+                            count={filters.districts.length > 0 || filters.stars.length > 0 || filters.types.length > 0
                                 ? Math.round(filteredHotelsLength / limit)
                                 : Math.round(allHotels.length / limit)
                             }
