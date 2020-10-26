@@ -79,30 +79,47 @@ export const Hotels = (props) => {
         if (filters.districts.length > 0
             || filters.stars.length > 0
             || filters.types.length > 0
+            || filters.facilities.length > 0
         ) {
             filtered = filtered.filter(([id, item]) => {
-                let result = [];
+                let isValidHotel = [];
 
                 if (filters.districts.length > 0) {
-                    result = [...result, filters.districts.includes(item.address.addressRegion)];
+                    isValidHotel = [...isValidHotel, filters.districts.includes(item.address.addressRegion)];
                 }
 
                 if (filters.stars.length > 0) {
-                    result = [...result, filters.stars.includes(String(item.stars))];
+                    isValidHotel = [...isValidHotel, filters.stars.includes(String(item.stars))];
                 }
 
                 if (filters.types.length > 0) {
-                    result = [...result, filters.types.includes(item.hotel_type_name)];
+                    isValidHotel = [...isValidHotel, filters.types.includes(item.hotel_type_name)];
                 }
 
-                return !result.includes(false);
+                if (filters.facilities.length > 0) {
+                    const facilitiesValues = Object.values(item.facilities);
+                    let isValidHotelFacilities = false;
+
+                    for (let i = 0; i < facilitiesValues.length; i++) {
+                        if (filters.facilities.includes(facilitiesValues[i].name)) {
+                            isValidHotelFacilities = true;
+                            i = facilitiesValues.length;
+                        } else {
+                            isValidHotelFacilities = false;
+                        }
+                    }
+
+                    isValidHotel = [...isValidHotel, isValidHotelFacilities];
+                }
+
+                return !isValidHotel.includes(false);
             });
         }
 
         if (sorts.includes('id')) {
              filtered = [...filtered].sort((a, b) => Number(b[0]) - Number(a[0]));
         }
-
+        console.log(filtered)
         setFilteredHotels(filtered);
         setFilteredHotelsLength(filtered.length);
 

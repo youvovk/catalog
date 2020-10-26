@@ -19,6 +19,7 @@ export const Filters = ({
     const [districts, setDistricts] = useState([]);
     const [stars, setStars] = useState([]);
     const [types, setTypes] = useState([]);
+    const [facilities, setFacilities] = useState([]);
     const [prevFilterSelectedInfo, setPrevFilterSelectedInfo] = useState('');
     const [isLabelExist, setIsLabelExist] = useState(false);
 
@@ -37,7 +38,8 @@ export const Filters = ({
         let districtsFiltered = districts;
         let starsFiltered = stars;
         let typesFiltered = types;
-        console.log(filteredHotels)
+        let facilitiesFiltered = facilities;
+
         if (filteredHotels.length > 0) {
             if (prevFilterSelectedInfo !== 'districts'
                 || (prevFilterSelectedInfo === 'districts' && isLabelExist && filters.districts.length === 0))
@@ -56,11 +58,20 @@ export const Filters = ({
             {
                 typesFiltered = getCategory({ way: 'hotel_type_name', data: filteredHotels });
             }
+
+            if (prevFilterSelectedInfo !== 'facilities'
+                || (prevFilterSelectedInfo === 'facilities' && isLabelExist && filters.facilities.length === 0))
+            {
+                facilitiesFiltered = getCategory({ way: 'name', data: filteredHotels.reduce((accum, [id, hotel]) => (
+                    [ ...accum, ...Object.entries(hotel.facilities)]
+                ), []) });
+            }
         }
 
         setDistricts(districtsFiltered);
         setStars(starsFiltered);
         setTypes(typesFiltered);
+        setFacilities(facilitiesFiltered);
     }, [filteredHotels]);
 
     const setSort = sort => {
@@ -287,96 +298,20 @@ export const Filters = ({
                             Удобства
                         </div>
                         <div className="c-filter__list">
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Wi-Fi
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Парковка
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Трансфер
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Номера для некурящих
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Размещение с животными
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Фитнес-центр
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Бассейн
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    СПА
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Ресторан
-                                                </span>
-                                </label>
-                            </div>
-                            <div className="c-checkbox">
-                                <label className="c-checkbox__label">
-                                    <input type="checkbox" name="checkbox" />
-                                        <span className="c-checkbox__icon" />
-                                        <span className="c-checkbox__title">
-                                                    Бар
-                                                </span>
-                                </label>
-                            </div>
+                            {Object.keys(allFilters.facilities).length > 0 && (
+                                Object.keys(allFilters.facilities).sort().map(label =>
+                                    <Checkbox
+                                        key={label}
+                                        name="facilities"
+                                        label={{ label: label, value: label }}
+                                        additionalClass={setClassForFilterItem (prevFilterSelectedInfo, facilities[label])}
+                                        hotels={facilities[label] ? facilities[label] : 0}
+                                        handleChange={handleChange}
+                                        isResetFilters={isResetFilters}
+                                        resetFilter={resetFilter}
+                                    />
+                                )
+                            )}
                         </div>
                     </div>
                     <div className="c-filter__item">

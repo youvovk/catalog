@@ -137,8 +137,16 @@ export const loadHotels = preparedHotels => (dispatch) => {
                 const districts = getCategory({ way: 'address', data: dataValue });
                 const stars = getCategory({ way: 'stars', data: dataValue });
                 const types = getCategory({ way: 'hotel_type_name', data: dataValue });
+                const facilities = getCategory({ way: 'name', data: dataValue.reduce((accum, [id, hotel]) => (
+                        [ ...accum, ...Object.entries(hotel.facilities)]
+                    ), []) });
 
-                dispatch(saveFilters({ districts: { ...districts }, stars: { ...stars }, types: { ...types } }));
+                dispatch(saveFilters({
+                    districts: { ...districts },
+                    stars: { ...stars },
+                    types: { ...types },
+                    facilities: { ...facilities },
+                }));
                 dispatch(saveHotels(data));
             })
             .catch(error => dispatch(setError(error.message)))
@@ -163,12 +171,21 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
             const districts = getCategory({ way: 'address', data: dataValue });
             const stars = getCategory({ way: 'stars', data: dataValue });
             const types = getCategory({ way: 'hotel_type_name', data: dataValue });
+            const facilities = getCategory({ way: 'name', data: dataValue.reduce((accum, [id, hotel]) => (
+                    [ ...accum, ...Object.entries(hotel.facilities)]
+                ), []) });
 
             dispatch(saveTotal(total));
             dispatch(setOffset(25));
             dispatch(setLimit(50));
             dispatch(saveFirstHotel(data));
-            dispatch(saveFilters({ districts: { ...districts }, stars: { ...stars }, types: { ...types } }));
+
+            dispatch(saveFilters({
+                districts: { ...districts },
+                stars: { ...stars },
+                types: { ...types },
+                facilities: { ...facilities },
+            }));
         })
         .catch(error => dispatch(setError(error.message)))
         .finally(() => dispatch(stopLoading()));
