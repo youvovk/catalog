@@ -17,16 +17,11 @@ export const FirstHotels = (props) => {
         error,
         sorts,
         isLoading,
-        loadFirstHotel,
     } = props;
 
-    useEffect(() => {
-        loadFirstHotel(0, 25);
-    }, []);
-
-    if (isLoading) {
-        return <Loader />;
-    }
+    // if (isLoading) {
+    //     return <Loader />;
+    // }
 
     if (error) {
         return <Error message={error} />;

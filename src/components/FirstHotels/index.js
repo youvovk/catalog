@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { FirstHotels } from './FirstHotels';
-import { loadFirstHotel } from "../../store/actions";
 // import { selectorRestaurants } from './store/selectors';
 
 const mapState2Props = (state) => {
@@ -18,7 +17,7 @@ const mapState2Props = (state) => {
 };
 
 const mapDispatch2Props = dispatch => ({
-    loadFirstHotel: (offset, limit, total) => dispatch(loadFirstHotel(offset, limit, total)),
+
 });
 
 const Enhanced = connect(

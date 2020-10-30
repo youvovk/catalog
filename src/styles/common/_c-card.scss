@@ -150,8 +150,9 @@
   &__text {
 
     @media (min-width: 768px) {
-      font-size: 12px;
-      line-height: 1.8;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #8593a2;
       overflow: hidden;
       display: -webkit-box;
       text-overflow: ellipsis;

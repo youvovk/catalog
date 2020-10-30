@@ -133,6 +133,7 @@ export const loadHotels = preparedHotels => (dispatch) => {
                     data
                 } = response;
 
+                // start prepared skeleton for filters
                 const dataValue = Object.entries(data);
                 const districts = getCategory({ way: 'address', data: dataValue });
                 const stars = getCategory({ way: 'stars', data: dataValue });
@@ -147,6 +148,8 @@ export const loadHotels = preparedHotels => (dispatch) => {
                     types: { ...types },
                     facilities: { ...facilities },
                 }));
+                // end prepared skeleton for filters
+
                 dispatch(saveHotels(data));
             })
             .catch(error => dispatch(setError(error.message)))
@@ -167,18 +170,15 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
                 data
             } = response;
 
+            // start prepared skeleton for filters
             const dataValue = Object.entries(data);
             const districts = getCategory({ way: 'address', data: dataValue });
             const stars = getCategory({ way: 'stars', data: dataValue });
             const types = getCategory({ way: 'hotel_type_name', data: dataValue });
             const facilities = getCategory({ way: 'name', data: dataValue.reduce((accum, [id, hotel]) => (
                     [ ...accum, ...Object.entries(hotel.facilities)]
-                ), []) });
-
-            dispatch(saveTotal(total));
-            dispatch(setOffset(25));
-            dispatch(setLimit(50));
-            dispatch(saveFirstHotel(data));
+                ), [])
+            });
 
             dispatch(saveFilters({
                 districts: { ...districts },
@@ -186,6 +186,12 @@ export const loadFirstHotel = (offset, limit) => (dispatch) => {
                 types: { ...types },
                 facilities: { ...facilities },
             }));
+            // end prepared skeleton for filters
+
+            dispatch(saveTotal(total));
+            dispatch(setOffset(25));
+            dispatch(setLimit(50));
+            dispatch(saveFirstHotel(data));
         })
         .catch(error => dispatch(setError(error.message)))
         .finally(() => dispatch(stopLoading()));

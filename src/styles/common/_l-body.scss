@@ -64,4 +64,32 @@
       background-color: #f3f4f9;
     }
   }
+
+  //styled progressbar
+  .MuiLinearProgress-barColorPrimary {
+    background-color: $blue;
+  }
+
+  .MuiLinearProgress-root {
+    height: 7px;
+  }
+
+  .makeStyles-root-1 {
+    margin-top: 20px;
+  }
+
+  //styled pagination
+  .MuiPaginationItem-root {
+    height: 50px;
+    min-width: 50px;
+    color: $black;
+    margin-right: 20px;
+    border-radius: 0;
+    border: 1px solid $gray-light;
+  }
+
+  .MuiPaginationItem-page.Mui-selected,
+  .MuiPaginationItem-page:hover {
+    background-color: #f7f9fc;
+  }
 }

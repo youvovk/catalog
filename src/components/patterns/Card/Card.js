@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { Row } from './Row';
 import { Slider } from '../Slider/Slider';
 
+const classNames = require('classnames');
+
 export const Card = ({ card = {} }) => {
     const options = { isLast: false, isPlural: true, isEmpty: false };
     const {
@@ -15,7 +17,9 @@ export const Card = ({ card = {} }) => {
         stars = 0,
         minrate = '',
         address = {},
-        booking_score = {}
+        booking_score = {},
+        descriptions = '',
+        facilities = {},
     } = card;
 
     const { cnt = 0, val = 0, word = '' } = booking_score ? booking_score : {};
@@ -435,6 +439,23 @@ export const Card = ({ card = {} }) => {
                     })}
                 </Row>
 
+                <Row additionalClass='min-768'>
+                    <div className="c-card__text">{descriptions}</div>
+                </Row>
+
+                <Row additionalClass='c-card--wrap min-768'>
+                    <div className="c-card__tag">
+                        {Object.entries(facilities).map(([key, { class: className, name }]) => (
+                            <a
+                                key={`card-tag--${Math.random()}`}
+                                className={classNames('c-card__tag--item', { [className]: className })}
+                            >
+                                {name}
+                            </a>
+                        ))}
+                    </div>
+                </Row>
+
                 {options.isLast && (
                     <>
                         <Row>{lastBooking()}</Row>
@@ -443,7 +464,7 @@ export const Card = ({ card = {} }) => {
                     </>
                 )}
 
-                {options.isPlural && <Row additionalClass='min-1152'>{list()}</Row>}
+                {false && options.isPlural && <Row additionalClass='min-1152'>{list()}</Row>}
 
                 {options.isEmpty && (
                     <>
@@ -486,7 +507,8 @@ Card.propTypes = {
         cnt: PropTypes.number,
         val: PropTypes.number,
         word: PropTypes.string
-    })
+    }),
+    descriptions: PropTypes.string,
 };
 
 Card.defaultProps = {
@@ -499,5 +521,6 @@ Card.defaultProps = {
     stars: 0,
     minrate: '',
     address: {},
-    booking_score: {}
+    booking_score: {},
+    descriptions: '',
 };

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
 
 import { Checkbox } from '../patterns/Checkbox/Checkbox';
 import { getCategory, setClassForFilterItem } from '../../fixtures/index';
@@ -20,10 +19,11 @@ export const Filters = ({
     const [stars, setStars] = useState([]);
     const [types, setTypes] = useState([]);
     const [facilities, setFacilities] = useState([]);
-    const [prevFilterSelectedInfo, setPrevFilterSelectedInfo] = useState('');
-    const [isFilterExist, setIsFilterExist] = useState(false);
-    const [prevFilteredHotelsLength, setPrevFilteredHotelsLength] = useState(0);
+    
+    //filters rules
+    const [filterSelectedName, setFilterSelectedName] = useState('');
 
+    //check if selected filter exist or not
     const handleChange = (name, label) => {
         const isFilterExist = filters[name].includes(label);
         const updatedFilters = isFilterExist
@@ -31,72 +31,32 @@ export const Filters = ({
             : [...filters[name], label];
 
         setFilter(updatedFilters, name);
-        setPrevFilterSelectedInfo(name);
-        setIsFilterExist(isFilterExist);
+        setFilterSelectedName(name);
     };
 
     useEffect(() => {
+        //default values if filters don't change
         let districtsFiltered = districts;
         let starsFiltered = stars;
         let typesFiltered = types;
         let facilitiesFiltered = facilities;
 
         if (filteredHotels.length > 0) {
-            if (prevFilterSelectedInfo !== 'districts'
-                || (prevFilterSelectedInfo === 'districts' && isFilterExist && filters.districts.length === 0))
-            {
-                districtsFiltered = getCategory({ way: 'address', data: filteredHotels });
-            }
+            //return object with default options and set specific from attributes
+            const buildOptions = (way, name) => ({ way, name, data: allHotels, filters });
 
-            if (prevFilterSelectedInfo !== 'stars'
-                || (prevFilterSelectedInfo === 'stars' && isFilterExist && filters.stars.length === 0))
-            {
-                starsFiltered = getCategory({ way: 'stars', data: filteredHotels });
-            }
-
-            if (prevFilterSelectedInfo !== 'types'
-                || (prevFilterSelectedInfo === 'types' && isFilterExist && filters.types.length === 0))
-            {
-                typesFiltered = getCategory({ way: 'hotel_type_name', data: filteredHotels });
-            }
-
-            if (prevFilterSelectedInfo !== 'facilities'
-                || (prevFilterSelectedInfo === 'facilities' && isFilterExist && filters.facilities.length === 0))
-            {
-                facilitiesFiltered = getCategory({ way: 'name', data: allHotels.reduce((accum, [id, hotel]) => (
-                        [ ...accum, ...Object.entries(hotel.facilities)]
-                    ), []) });
-            }
-
-            // this is will rerender selected filters if loading API data don't end
-            const isNeedRerender = prevFilteredHotelsLength < filteredHotels.length;
-
-            if (isNeedRerender) {
-                switch (prevFilterSelectedInfo) {
-                    case 'districts': districtsFiltered = getCategory({ way: 'address', data: allHotels });
-                        break;
-                    case 'stars': starsFiltered = getCategory({ way: 'stars', data: allHotels });
-                        break;
-                    case 'types': typesFiltered = getCategory({ way: 'types', data: allHotels });
-                        break;
-                    case 'facilities': facilitiesFiltered = getCategory({
-                        way: 'name',
-                        data: allHotels.reduce((accum, [id, hotel]) => (
-                            [ ...accum, ...Object.entries(hotel.facilities)]
-                        ), []) });
-                        break;
-                    default: console.log('Filters component default');
-                        break;
-                }
-            }
+            //below we get ready filters for render in component
+            districtsFiltered = getCategory(buildOptions('address', 'districts'));
+            starsFiltered = getCategory(buildOptions('stars', 'stars'));
+            typesFiltered = getCategory(buildOptions('hotel_type_name', 'types'));
+            facilitiesFiltered = getCategory(buildOptions('facilities', 'facilities'));
         }
 
+        //set filtered category in state Filters component
         setDistricts(districtsFiltered);
         setStars(starsFiltered);
         setTypes(typesFiltered);
         setFacilities(facilitiesFiltered);
-
-        setPrevFilteredHotelsLength(filteredHotels.length);
     }, [filteredHotels]);
 
     const setSort = sort => {
@@ -109,9 +69,6 @@ export const Filters = ({
 
     return (
         <div className="c-filters">
-
-            {/*<Button variant="contained" color="primary" onClick={() => setSort('id')}>Sort by id</Button>*/}
-
             <form className="c-filter" id="c-filter">
                 <div className="c-filter__map">
                     <div className="c-filter__map--title">
@@ -128,9 +85,12 @@ export const Filters = ({
                 </div>
                 <div className="c-filter__main">
                     <div className="c-filter__item">
-                        <div className="c-filter__title">
-                            Количество звезд
-                        </div>
+                        {Object.keys(allFilters.stars).length > 0 && (
+                            <div className="c-filter__title">
+                                Количество звезд
+                            </div>
+                        )}
+
                         <div className="c-filter__list">
                             {Object.keys(allFilters.stars).length > 0 &&
                                 Object.keys(allFilters.stars)
@@ -139,7 +99,7 @@ export const Filters = ({
                                         <Checkbox
                                             key={label}
                                             name="stars"
-                                            additionalClass={setClassForFilterItem(prevFilterSelectedInfo, stars[label])}
+                                            additionalClass={setClassForFilterItem(filterSelectedName, stars[label])}
                                             label={{ label: label === '0' ? 'без звёзд' : label, value: label }}
                                             labelAdditional={label === '0' ? '' : 'звезды'}
                                             hotels={stars[label] ? stars[label] : 0}
@@ -182,9 +142,11 @@ export const Filters = ({
                         </div>
                     </div>
                     <div className="c-filter__item">
-                        <div className="c-filter__title">
-                            Тип размещения
-                        </div>
+                        {Object.keys(allFilters.types).length > 0 && (
+                            <div className="c-filter__title">
+                                Тип размещения
+                            </div>
+                        )}
                         <div className="c-filter__list">
                             {Object.keys(allFilters.types).length > 0 &&
                                 Object.keys(allFilters.types).sort().map(label =>
@@ -192,7 +154,7 @@ export const Filters = ({
                                         key={label}
                                         name="types"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, types[label])}
+                                        additionalClass={setClassForFilterItem(filterSelectedName, types[label])}
                                         hotels={types[label] ? types[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
@@ -202,9 +164,11 @@ export const Filters = ({
                         </div>
                     </div>
                     <div className="c-filter__item">
-                        <div className="c-filter__title">
-                            Район
-                        </div>
+                        {Object.keys(allFilters.districts).length > 0 &&
+                            <div className="c-filter__title">
+                                Район
+                            </div>
+                        }
                         <div className="c-filter__list">
                             {Object.keys(allFilters.districts).length > 0 && (
                                 Object.keys(allFilters.districts).sort().map(label =>
@@ -212,7 +176,7 @@ export const Filters = ({
                                         key={label}
                                         name="districts"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, districts[label])}
+                                        additionalClass={setClassForFilterItem(filterSelectedName, districts[label])}
                                         hotels={districts[label] ? districts[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
@@ -319,9 +283,11 @@ export const Filters = ({
                         </div>
                     </div>
                     <div className="c-filter__item">
-                        <div className="c-filter__title">
-                            Удобства
-                        </div>
+                        {Object.keys(allFilters.facilities).length > 0 && (
+                            <div className="c-filter__title">
+                                Удобства
+                            </div>
+                        )}
                         <div className="c-filter__list">
                             {Object.keys(allFilters.facilities).length > 0 && (
                                 Object.keys(allFilters.facilities).sort().map(label =>
@@ -329,7 +295,7 @@ export const Filters = ({
                                         key={label}
                                         name="facilities"
                                         label={{ label: label, value: label }}
-                                        additionalClass={setClassForFilterItem(prevFilterSelectedInfo, facilities[label])}
+                                        additionalClass={setClassForFilterItem(filterSelectedName, facilities[label])}
                                         hotels={facilities[label] ? facilities[label] : 0}
                                         handleChange={handleChange}
                                         isResetFilters={isResetFilters}
